@@ -1,0 +1,35 @@
+<div class="collapse navbar-collapse" id="navbarSupportedContent">
+  <ul class="navbar-nav mr-auto">
+    <li class="nav-item">
+      <a class="nav-link <%= typeof url !== 'undefined' && url === 'home' ? 'active animated bounce' : '' %>" href="/">Home</a>
+    </li>
+    <% if(currentUser && currentUser.isAuthenticated) { %>
+      <li class="nav-item">
+        <a class="nav-link <%= typeof url !== 'undefined' && url === 'blogs' ? 'active animated bounce' : '' %>" href="#">View Your Blogs</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link <%= typeof url !== 'undefined' && url === 'new' ? 'active animated bounce' : '' %>" href="#">New Blog</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link <%= typeof url !== 'undefined' && url === 'profile' ? 'active animated bounce' : '' %>" href="#">Profile</a>
+      </li>
+    </ul>
+    <form class="form-inline my-2 my-lg-0">
+      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
+    <% } else { %>
+    <li class="nav-item">
+      <a class="nav-link <%= typeof url !== 'undefined' && url === 'register' ? 'active animated bounce' : '' %>" href="/users/register">Register</a>
+    </li>
+    </ul>
+    <form class="form-inline my-2 my-lg-0">
+      <input class="form-control mr-sm-2 m-fix" type="text" name="username" placeholder="Username" aria-label="Username">
+      <input class="form-control mr-sm-2" type="password" name="password" placeholder="Password" aria-label="Password">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Login</button>
+    </form>
+    <% } %>
+    
+    
+  
+</div>

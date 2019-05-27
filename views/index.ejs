@@ -1,0 +1,49 @@
+<% include ./partials/header %>
+  <% include ./partials/hero %>
+  <main>
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <h1 class="text-center">What is <%= title %></h1>
+          <hr class="style-two">
+          <div class="row mt-2">
+            <div class="col-md-6 mx-auto my-auto">
+              <i class="fas fa-user-edit fa-3x d-flex justify-content-center mb-2 text-primary"></i>
+              <h2 class="lead"><%= title %> is exactly what the title says...</h2>
+              <p><%= title %> uses a very simple and user friendly text editor that allows you to input code blocks, online images and allows full screen editing and previews.</p>
+            </div>
+            <div class="col-md-6">
+              <pre class="">Formatted Code Example
+                <code class="prettyprint format-code shadow">
+                  #include &lt;iostream&gt; 
+                  int main(int argc, char *argv[]) {
+                    /* An annoying "Hello World" example */ 
+                    for (auto i = 0; i &lt; 0xFFFF; i++) 
+                    cout &lt;&lt; "Hello, World!" &lt;&lt; endl;
+                    char c = '\n';
+                    unordered_map &lt;string, vector&lt;string&gt; &gt; m;
+                    m["key"] = "\\\\"; // this is an error 
+                    return -2e3 + 12l; 
+                  }
+                </code>
+              </pre>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <img src="/images/js.jpeg" alt="Code Image" class="img-fluid shadow rounded">
+            </div>
+            <div class="col-md-6 mx-auto my-auto text-right">
+              <i class="fab fa-node fa-3x d-flex justify-content-center mb-2 text-primary"></i>
+              <h2 class="lead"><%= title %> is built using node.js...</h2>
+              <p><%= title %> is fast, easy to use and open source.</p>
+            </div>
+          </div>
+          <div class="text-center mt-5">
+            <a href="/users/get-started" class="btn btn-primary shadow">Get Started</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+<% include ./partials/footer %>  
