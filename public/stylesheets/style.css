@@ -11,14 +11,14 @@ main {
   background-size: cover;
   background-position: center bottom;
   background-attachment: fixed;
-  min-height: 60vh;
-  max-height: 60vh;
+  min-height: 100vh;
+  max-height: 100vh;
   box-shadow: 2px 2px 2px 3px rgba(0, 0, 0, 0.7); }
 
 .hero-text-box {
   position: absolute;
   width: 100vw;
-  top: 30vh;
+  top: 50vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -26,6 +26,10 @@ main {
   z-index: 999; }
 
 .fixed-top.scrolled {
+  background-color: #343a40 !important;
+  transition: background-color 300ms linear; }
+
+.fixed-bottom.scrolled {
   background-color: #343a40 !important;
   transition: background-color 300ms linear; }
 
@@ -45,6 +49,60 @@ hr.style-two {
 
 .typed-cursor {
   font-size: 30px; }
+
+.scroll-downs {
+  display: block;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: -150px;
+  left: 0;
+  margin: auto;
+  width: 34px;
+  height: 55px; }
+
+.mousey {
+  width: 3px;
+  padding: 10px 15px;
+  height: 35px;
+  border: 2px solid #fff;
+  border-radius: 25px;
+  opacity: 0.75;
+  box-sizing: content-box; }
+
+.scroller {
+  width: 3px;
+  height: 10px;
+  border-radius: 25%;
+  background-color: #fff;
+  animation-name: scroll;
+  animation-duration: 2.2s;
+  animation-timing-function: cubic-bezier(0.15, 0.41, 0.69, 0.94);
+  animation-iteration-count: infinite; }
+
+@keyframes scroll {
+  0% {
+    opacity: 0; }
+  10% {
+    transform: translateY(0);
+    opacity: 1; }
+  100% {
+    transform: translateY(15px);
+    opacity: 0; } }
+
+.form-error {
+  color: red;
+  position: absolute; }
+
+.form-success {
+  color: green;
+  position: absolute; }
+
+.small-img {
+  max-height: 25px;
+  height: 25px;
+  width: 25px;
+  border-radius: 50%; }
 
 @media only screen and (max-width: 992px) {
   .message {

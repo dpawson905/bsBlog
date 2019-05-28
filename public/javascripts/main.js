@@ -1,9 +1,25 @@
+/*global $:true, jQuery:true */
+
+function checkPasswordMatch() {
+  var password = $('#password').val();
+  var confirmPassword = $('#password2').val();
+
+  if (password != confirmPassword)
+    $('#checkPw').addClass('form-error').removeClass('form-success').html('Passwords do not match!');
+  else
+    $('#checkPw').addClass('form-success').removeClass('form-error').html('Passwords match.');
+}
+
 $(document).ready(function () {
   $(document).scroll(function () {
     var $nav = $(".fixed-top");
-    var $navHeight = $(".header-img")
-    $nav.toggleClass('scrolled', $(this).scrollTop() > $navHeight.height() - 20);
+    var $nav1 = $(".fixed-bottom");
+    var $navHeight = $(".header-img");
+    $nav.toggleClass('scrolled', $(this).scrollTop() > $navHeight.height() - 50);
+    $nav1.toggleClass('scrolled', $(this).scrollTop() > $nav1.height());
   });
+
+  $('#password2, #checkPw').keyup(checkPasswordMatch);
 
   window.setTimeout(function () {
     $('.alert')
@@ -12,11 +28,4 @@ $(document).ready(function () {
         $(this).remove();
       });
   }, 10000);
-
-  new Typed('.typed', {
-    strings: [`Welcome to SimpleBlog`],
-    typeSpeed: 60,
-    startDelay: 100,
-    contentType: 'html'
-  });
 });

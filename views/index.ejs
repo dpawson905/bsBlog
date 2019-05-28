@@ -11,20 +11,26 @@
               <i class="fas fa-user-edit fa-3x d-flex justify-content-center mb-2 text-primary"></i>
               <h2 class="lead"><%= title %> is exactly what the title says...</h2>
               <p><%= title %> uses a very simple and user friendly text editor that allows you to input code blocks, online images and allows full screen editing and previews.</p>
+              <p>You can also just type normal text like you would in a blog... Either way, it's dead simple to use and the end result looks amazing!</p>
             </div>
             <div class="col-md-6">
               <pre class="">Formatted Code Example
                 <code class="prettyprint format-code shadow">
-                  #include &lt;iostream&gt; 
-                  int main(int argc, char *argv[]) {
-                    /* An annoying "Hello World" example */ 
-                    for (auto i = 0; i &lt; 0xFFFF; i++) 
-                    cout &lt;&lt; "Hello, World!" &lt;&lt; endl;
-                    char c = '\n';
-                    unordered_map &lt;string, vector&lt;string&gt; &gt; m;
-                    m["key"] = "\\\\"; // this is an error 
-                    return -2e3 + 12l; 
-                  }
+                    $(document).ready(function () { 
+                      $(document).scroll(function () { 
+                        var $nav = $(".fixed-top"); 
+                        var $navHeight = $(".header-img") 
+                        $nav.toggleClass('scrolled', 
+                          $(this).scrollTop() &gt; $navHeight.height() - 20); 
+                      });
+                      <br /> 
+                      new Typed('.typed', { 
+                        strings: [`Welcome to SimpleBlog`], 
+                        typeSpeed: 60, 
+                        startDelay: 100, 
+                        contentType: 'html' 
+                      });
+                    });
                 </code>
               </pre>
             </div>

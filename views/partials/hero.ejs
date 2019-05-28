@@ -1,5 +1,15 @@
 <div class="header-img">
   <div class="hero-text-box">
-    <h1 class="typed"></h1>
+    
+    <% if (url == 'home') { %>
+      <h1 class="typed"></h1>
+      <div class="scroll-downs">
+        <div class="mousey">
+          <div class="scroller"></div>
+        </div>
+      </div>
+    <% } else { %>
+      <h1 class=""><%= title %> <span class="h2"><%= subTitle %></span></h1>
+    <% } %>
   </div>
 </div>

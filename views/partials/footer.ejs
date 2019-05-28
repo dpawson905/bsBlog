@@ -1,9 +1,20 @@
-  <nav class="navbar fixed-bottom navbar-dark bg-dark d-none d-lg-block">
+  <nav class="navbar fixed-bottom navbar-dark bg-transparent d-none d-lg-block">
     <a class="navbar-brand d-inline text-center d-inline-block" href="/"><i class="fas fa-blog text-primary"></i> SimpleBlog</a>
     <a href="#" class="nav-link text-white d-inline-block float-right text-center">Copyright 2019 Darrell Pawson</a>
   </nav>
   <script src="/jquery/dist/jquery.min.js"></script>
-  <script src="/typed.js/lib/typed.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.3.26/jquery.form-validator.min.js"></script>
+  <% if (url == 'home') { %>
+    <script src="/typed.js/lib/typed.min.js"></script>
+    <script>
+      new Typed('.typed', {
+        strings: [`Welcome to SimpleBlog`],
+        typeSpeed: 60,
+        startDelay: 100,
+        contentType: 'html'
+      });
+    </script>
+  <% } %>
   <script src="/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
   <script src="/javascripts/main.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js" integrity="sha256-aYTdUrn6Ow1DDgh5JTc3aDGnnju48y/1c8s1dgkYPQ8=" crossorigin="anonymous"></script>
