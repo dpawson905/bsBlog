@@ -1,30 +1,41 @@
 <% if(error && error.length){ %>
-  <div class="container message">
-    <div class="row">
-      <div class="col-12">
-        <div id="alert-danger" class="alert alert-danger alert-dismissable fade show mt-2" role="alert">
-          <%- error %>
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button> 
-          </div>
-      </div>
+  <div class="toast message" role="alert" aria-live="assertive" aria-atomic="true" data-delay="10000">
+    <div class="toast-header">
+      <i class="fas fa-bug"></i>&nbsp;
+      <strong class="mr-auto">SimpleBlog</strong>
+      <small></small>
+      <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="toast-body text-danger">
+      <%- error %>
     </div>
   </div>
-  
+  <script>
+    $(document).ready(function(){
+      $('.toast').toast('show');
+    });
+  </script>
 <% } %>
 
 <% if(success && success.length){ %>
-  <div class="container message">
-    <div class="row">
-      <div class="col-12">
-        <div id="alert-success" class="alert alert-success alert-dismissable fade show mt-2" role="alert">
-          <%- success %>
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-      </div>
+  <div class="toast message" role="alert" aria-live="assertive" aria-atomic="true" data-delay="10000">
+    <div class="toast-header">
+      <i class="fas fa-thumbs-up"></i>&nbsp;
+      <strong class="mr-auto">SimpleBlog</strong>
+      <small></small>
+      <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="toast-body text-success">
+      <%- success %>
     </div>
   </div>
+  <script>
+    $(document).ready(function(){
+      $('.toast').toast('show');
+    });
+  </script>
 <% } %>

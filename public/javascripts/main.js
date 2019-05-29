@@ -21,11 +21,11 @@ $(document).ready(function () {
 
   $('#password2, #checkPw').keyup(checkPasswordMatch);
 
-  window.setTimeout(function () {
-    $('.alert')
-      .fadeTo(100, 0)
-      .slideUp(500, function () {
-        $(this).remove();
-      });
-  }, 10000);
+  // window.setTimeout(function () {
+  //   $('.toast')
+  //     .fadeTo(100, 0)
+  //     .slideUp(500, function () {
+  //       $(this).remove();
+  //     });
+  // }, 10000);
 });

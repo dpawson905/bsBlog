@@ -1,3 +1,4 @@
+const passport = require('passport');
 const kickbox = require("kickbox")
   .client(process.env.KICKBOX_API_KEY)
   .kickbox();
@@ -109,5 +110,24 @@ module.exports = {
       req.flash("error", err.message);
       return res.redirect("/users/register");
     }
+  },
+
+  async postLogin(req, res, next) {
+    const user = await User.findOne({ username: req.body.username });
+    if(!user) {
+      req.flash('error', 'Invalid Username');
+      return res.redirect('/');
+    }
+    await passport.authenticate('local', {
+      successRedirect: '/',
+      failureRedirect: '/users/login',
+      successFlash: `Welcome back ${user.username}`,
+      failureFlash: true
+    })(req, res, next);
+  },
+
+  logOut(req, res, next) {
+    req.logout();
+    return res.redirect('/');
   }
 };

@@ -41,8 +41,9 @@ hr.style-two {
 .message {
   position: fixed;
   top: 10%;
-  width: 40vw;
-  left: 60%; }
+  min-width: 20vw;
+  max-width: 50vw;
+  right: 10px; }
 
 .format-code {
   margin-left: -120px; }
@@ -107,10 +108,11 @@ hr.style-two {
 @media only screen and (max-width: 992px) {
   .message {
     position: fixed;
-    top: 10%;
-    left: 0;
-    right: 0;
-    width: 100vw; }
+    top: 10vh;
+    left: 4vw;
+    right: 5vw;
+    min-width: 90vw;
+    max-width: 90vw; }
   .bg-transparent {
     background-color: #343a40 !important; }
   .m-fix {
