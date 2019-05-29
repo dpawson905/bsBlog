@@ -1,29 +1,33 @@
 const passport = require('passport');
-const kickbox = require("kickbox")
+const sgMail = require('@sendgrid/mail');
+
+const { cloudinary } = require('../cloudinary');
+const { deleteProfileImage } = require('../middleware');
+const kickbox = require('kickbox')
   .client(process.env.KICKBOX_API_KEY)
   .kickbox();
 
-const User = require("../models/user");
-const { cloudinary } = require("../cloudinary");
-const { deleteProfileImage } = require("../middleware");
+const User = require('../models/user');
+
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 module.exports = {
   async getStarted(req, res, next) {
     if (req.user) {
-      res.redirect("/blogs");
+      res.redirect('/blogs');
     } else {
-      res.redirect("/users/register");
+      res.redirect('/users/register');
     }
   },
 
   getRegister(req, res, next) {
-    res.render("auth/register", {
-      firstName: "",
-      lastName: "",
-      email: "",
-      username: "",
-      subTitle: "- Register",
-      url: "register"
+    res.render('auth/register', {
+      firstName: '',
+      lastName: '',
+      email: '',
+      username: '',
+      subTitle: '- Register',
+      url: 'register'
     });
   },
 
@@ -32,24 +36,35 @@ module.exports = {
     let error;
     try {
       const user = await User.findOne({ email: req.body.email });
+
+      const msg = {
+        from: 'SimpleBlog Admin <dpawson905@gmail.com>',
+        to: user.email,
+        subject: `Welcome to SimpleBlog ${user.firstName}`,
+        text: `Hello ${user.username} welcome to SimpleBlog.`.replace(
+          /        /g,
+          ''
+        )
+      };
+
       if (user) {
         req.flash(
-          "error",
-          "This email address is in use. Please login using your email address."
+          'error',
+          'This email address is in use. Please login using your email address.'
         );
-        return res.redirect("/");
+        return res.redirect('/');
       }
 
       if (process.env.KICKBOX_API_KEY) {
         await kickbox.verify(req.body.email, async (err, response) => {
           if (err) {
-            req.flash("error", err.message);
-            return res.redirect("/users/register");
+            req.flash('error', err.message);
+            return res.redirect('/users/register');
           }
-          if (response.body.result == "deliverable") {
+          if (response.body.result == 'deliverable') {
             if (req.body.password !== req.body.password2) {
-              error = "Passwords to not match";
-              res.render("auth/register", {
+              error = 'Passwords to not match';
+              res.render('auth/register', {
                 firstName,
                 lastName,
                 email,
@@ -59,7 +74,7 @@ module.exports = {
                 subTitle: '- Register'
               });
             }
-            console.log(req.file)
+            console.log(req.file);
             if (req.file) {
               const { secure_url, public_id } = req.file;
               req.body.image = {
@@ -71,17 +86,18 @@ module.exports = {
               new User(req.body),
               req.body.password
             );
+            await sgMail.send(msg);
             await req.login(user, function(err) {
               if (err) return next(err);
-              req.flash("success", `Welcome to SimpleBlog ${user.username}`);
-              const redirectUrl = req.session.redirectTo || "/";
+              req.flash('success', `Welcome to SimpleBlog ${user.username}`);
+              const redirectUrl = req.session.redirectTo || '/';
               delete req.session.redirectTo;
               res.redirect(redirectUrl);
             });
           } else {
-            error = "This is not a valid email address";
+            error = 'This is not a valid email address';
             console.log(req.body);
-            res.render("auth/register", {
+            res.render('auth/register', {
               firstName,
               lastName,
               email,
@@ -93,7 +109,6 @@ module.exports = {
           }
         });
       } else {
-        console.log(req.file)
         if (req.file) {
           const { secure_url, public_id } = req.file;
           req.body.image = {
@@ -103,18 +118,25 @@ module.exports = {
         }
         console.log(req.body);
         const user = await User.register(new User(req.body), req.body.password);
-        req.flash("success", `Thanks for signing up ${user.username}`);
+        await sgMail.send(msg);
+        await req.login(user, function(err) {
+          if (err) return next(err);
+          req.flash('success', `Welcome to SimpleBlog ${user.username}`);
+          const redirectUrl = req.session.redirectTo || '/';
+          delete req.session.redirectTo;
+          res.redirect(redirectUrl);
+        });
       }
     } catch (err) {
       deleteProfileImage(req);
-      req.flash("error", err.message);
-      return res.redirect("/users/register");
+      req.flash('error', err.message);
+      return res.redirect('/users/register');
     }
   },
 
   async postLogin(req, res, next) {
     const user = await User.findOne({ username: req.body.username });
-    if(!user) {
+    if (!user) {
       req.flash('error', 'Invalid Username');
       return res.redirect('/');
     }

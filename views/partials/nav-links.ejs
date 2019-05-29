@@ -11,7 +11,7 @@
       <a class="nav-link <%= typeof url !== 'undefined' && url === 'new' ? 'active animated bounce' : '' %>" href="#">New Blog</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link <%= typeof url !== 'undefined' && url === 'profile' ? 'active animated bounce' : '' %>" href="#">
+      <a class="nav-link <%= typeof url !== 'undefined' && url === 'profile' ? 'active animated bounce' : '' %>" href="/users/user/<%= currentUser._id %>">
         <img class="small-img img-fluid" src="<%= currentUser.image.secure_url %>" alt="<%= currentUser.username %>"> Profile
       </a>
     </li>
@@ -29,6 +29,9 @@
   <li class="nav-item">
     <a class="nav-link <%= typeof url !== 'undefined' && url === 'register' ? 'active animated bounce' : '' %>" href="/users/register">Register</a>
   </li>
+  <li class="nav-item">
+    <a class="nav-link link-fix" data-toggle="modal" data-target="#forgotPwModal">Forgot Password</a>
+  </li>
   </ul>
   <form action="/users/login" method="post" class="form-inline my-2 my-lg-0">
     <input class="form-control mr-sm-2 m-fix" type="text" name="username" placeholder="Username" aria-label="Username">
@@ -36,7 +39,4 @@
     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Login</button>
   </form>
   <% } %>
-    
-    
-  
 </div>

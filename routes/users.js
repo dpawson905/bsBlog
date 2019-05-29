@@ -13,6 +13,10 @@ const {
 } = require('../controllers/auth');
 
 const {
+  getProfile
+} = require('../controllers/profile');
+
+const {
   asyncErrorHandler
 } = require('../middleware');
 
@@ -30,5 +34,8 @@ router.post('/login', asyncErrorHandler(postLogin));
 
 /* Logout */
 router.get('/logout', logOut);
+
+/* GET user profile */
+router.get('/user/:id', asyncErrorHandler(getProfile));
 
 module.exports = router;

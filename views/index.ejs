@@ -55,4 +55,7 @@
       </div>
     </div>
   </main>
+  <% if (!currentUser&& !isAuthenticated) { %>
+    <% include ./partials/forgotPwModal %>
+  <% } %>
 <% include ./partials/footer %>  

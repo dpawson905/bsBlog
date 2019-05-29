@@ -9,10 +9,19 @@ main {
 .header-img {
   background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url("/images/blog.jpeg");
   background-size: cover;
-  background-position: center bottom;
+  background-position: center;
   background-attachment: fixed;
   min-height: 100vh;
   max-height: 100vh;
+  box-shadow: 2px 2px 2px 3px rgba(0, 0, 0, 0.7); }
+
+.profile-hero {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url("/images/profile-hero.jpeg");
+  background-size: cover;
+  background-position: center top;
+  background-attachment: fixed;
+  min-height: 50vh;
+  max-height: 50vh;
   box-shadow: 2px 2px 2px 3px rgba(0, 0, 0, 0.7); }
 
 .hero-text-box {
@@ -23,7 +32,7 @@ main {
   justify-content: center;
   align-items: center;
   color: #fff;
-  z-index: 999; }
+  z-index: 500; }
 
 .fixed-top.scrolled {
   background-color: #343a40 !important;
@@ -104,6 +113,14 @@ hr.style-two {
   height: 25px;
   width: 25px;
   border-radius: 50%; }
+
+.user-img {
+  height: 150px;
+  width: 150px;
+  box-shadow: 0px 2px 4px #000; }
+
+.link-fix {
+  cursor: pointer; }
 
 @media only screen and (max-width: 992px) {
   .message {
