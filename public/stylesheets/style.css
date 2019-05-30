@@ -1,6 +1,10 @@
 body {
+  font-family: 'Poppins', sans-serif;
   overflow-x: hidden !important;
   background-color: #fcfcfc; }
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Merriweather', serif; }
 
 main {
   padding: 50px 0 100px 0;
@@ -16,13 +20,21 @@ main {
   box-shadow: 2px 2px 2px 3px rgba(0, 0, 0, 0.7); }
 
 .profile-hero {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url("/images/profile-hero.jpeg");
+  background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url("/images/bridge.jpeg");
   background-size: cover;
-  background-position: center top;
+  background-position: center bottom;
   background-attachment: fixed;
   min-height: 50vh;
-  max-height: 50vh;
-  box-shadow: 2px 2px 2px 3px rgba(0, 0, 0, 0.7); }
+  max-height: 50vh; }
+
+.bg-custom {
+  background: rgba(200, 200, 200, 0.6);
+  box-shadow: 0 10px 20px #000; }
+
+.profile-wrapper {
+  position: relative;
+  max-width: 70vw;
+  margin: -5% auto 0 auto; }
 
 .hero-text-box {
   position: absolute;
@@ -115,9 +127,12 @@ hr.style-two {
   border-radius: 50%; }
 
 .user-img {
-  height: 150px;
-  width: 150px;
-  box-shadow: 0px 2px 4px #000; }
+  height: auto;
+  width: 100%;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.5); }
+
+.footer-fix {
+  margin-bottom: 100px; }
 
 .link-fix {
   cursor: pointer; }
