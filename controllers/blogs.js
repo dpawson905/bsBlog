@@ -3,11 +3,9 @@ const User = require('../models/user');
 
 module.exports = {
   async getBlogs(req, res, next) {
-    const user = await User.findById(req.user.id);
-    const blogs = await Blog.find();
+    const blogs = await Blog.find({ author: req.user._id});
     res.render('blogs/index', {
       blogs,
-      user,
       subTitle: '- Your Blogs'
     });
   },
