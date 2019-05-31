@@ -35,7 +35,25 @@ const BlogSchema = new Schema({
   publishDate: {
     type: Date,
     default: Date.now
+  },
+  featured: {
+    type: Boolean
   }
 }, { timestamps: true });
+
+BlogSchema.index({
+  title: 'text'
+});
+
+// pre-hook middleware to populate author in question index routes
+BlogSchema.pre('find', function(next) {
+  this.populate('author');
+  next();
+});
+
+BlogSchema.pre('findOne', function(next) {
+  this.populate('author');
+  next();
+});
 
 module.exports = mongoose.model('Blog', BlogSchema);

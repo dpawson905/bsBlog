@@ -123,6 +123,25 @@ hr.style-two {
   right: 10px; }
 
 /* END TOAST CSS */
+/* BEGIN BLOG CSS */
+.no-blog-wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, 75%); }
+
+.blog-title {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #ffffff;
+  z-index: 2; }
+
+.date-fix {
+  font-family: 'Poppins', sans-serif; }
+
+/* END BLOG CSS */
 /* BEGIN PROFILE CSS */
 .profile-hero {
   background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url("/images/bridge.jpeg");
@@ -159,11 +178,11 @@ hr.style-two {
 .footer-fix {
   margin-bottom: 100px; }
 
-.bg-transparent {
-  background-color: #343a40 !important; }
-
 .m-fix {
   margin-bottom: 5px; }
+
+.custom-container {
+  max-width: 80vw; }
 
 /* END HELPER/RANDOM CSS */
 /* MEDIA QUERIES */
