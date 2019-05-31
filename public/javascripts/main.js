@@ -19,12 +19,17 @@ function checkPasswordMatch() {
 var $nav = $(".fixed-top");
 var $nav1 = $(".fixed-bottom");
 var $navHeight = $(".header-img");
+var $profileHeight = $(".profile-hero");
 
 $(document).ready(function() {
   $(document).scroll(function() {
     $nav.toggleClass(
       "scrolled",
       $(this).scrollTop() > $navHeight.height() - 50
+    );
+    $nav.toggleClass(
+      "scrolled",
+      $(this).scrollTop() > $profileHeight.height() - 100
     );
     $nav1.toggleClass("scrolled", $(this).scrollTop() > $nav1.height());
   });

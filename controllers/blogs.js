@@ -9,4 +9,10 @@ module.exports = {
       subTitle: '- Your Blogs'
     });
   },
+
+  newBlog(req, res, next) {
+    res.render('blogs/new', {
+      subTitle: '- New Blog'
+    });
+  }
 }

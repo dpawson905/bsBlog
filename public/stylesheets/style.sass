@@ -126,6 +126,12 @@ hr.style-two
   left: 50%
   transform: translate(-50%, 75%)
 
+.CodeMirror, .CodeMirror-scroll
+  min-height: 65vh
+
+.hljs
+  /* width: 50vw; */
+  margin: 0 auto !important
 
 .blog-title
   position: absolute
@@ -137,6 +143,15 @@ hr.style-two
 
 .date-fix
   font-family: 'Poppins', sans-serif
+
+.editor-toolbar.fullscreen
+  z-index: 1031
+
+.editor-preview-side
+  z-index: 700
+
+.CodeMirror-fullscreen
+  z-index: 700
 /* END BLOG CSS */
 
 /* BEGIN PROFILE CSS */
