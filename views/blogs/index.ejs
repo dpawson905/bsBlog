@@ -1,0 +1,56 @@
+<% include ../partials/header %>
+  <div class="profile-hero">
+    <div class="hero-text-box-2">        
+      <h1><%= title %> <span class="h2"><%= subTitle %></span></h1>
+    </div>
+  </div>
+  <div class="container-fluid footer-fix">
+    <div class="jumbotron profile-wrapper bg-custom">
+      <div class="row">
+        <div class="col-12 mt-5">
+          <div class="row">
+            <% if(!blogs.length) { %>
+              <div class="col-12 text-center">
+                <h1>No Blogs yet!</h1>
+                <a href="/blogs/new" class="btn btn-primary">Create a new blog</a>
+              </div>
+            <% } else { %>
+              <% blogs.forEach((blog) => { %>
+                <div class="col-lg-4">
+                  <div class="card shadow-lg">
+                    <img src="<%= blog.image.secure_url %>" class="card-img-top" alt="<%= user.username %>'s blog image">
+                    <div class="card-body">
+                      <h5 class="card-title"><%= (user.firstName + ' ' + user.lastName).toUpperCase() %></h5>
+                      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                      <li class="list-group-item">Cras justo odio</li>
+                      <li class="list-group-item">Dapibus ac facilisis in</li>
+                      <li class="list-group-item">Vestibulum at eros</li>
+                    </ul>
+                    <div class="card-body">
+                      <a href="#" class="card-link">Card link</a>
+                      <a href="#" class="card-link">Another link</a>
+                    </div>
+                  </div>
+                </div>
+              <% }) %>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <nav class="navbar fixed-bottom navbar-dark bg-dark d-none d-lg-block">
+    <a class="navbar-brand d-inline text-center d-inline-block" href="/"><i class="fas fa-blog text-primary"></i> SimpleBlog</a>
+    <a href="#" class="nav-link text-white d-inline-block float-right text-center">Copyright 2019 Darrell Pawson</a>
+  </nav>
+  
+  <script src="/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/javascripts/main.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js" integrity="sha256-aYTdUrn6Ow1DDgh5JTc3aDGnnju48y/1c8s1dgkYPQ8=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  </body>
+</html>
