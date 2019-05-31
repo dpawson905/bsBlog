@@ -2,10 +2,10 @@ const express = require('express');
 const router = express.Router();
 
 const {
-  getIndex
-} = require('../controllers');
+  getBlogs
+} = require('../controllers/blogs');
 
 /* GET home page. */
-router.get('/', getIndex);
+router.get('/', getBlogs);
 
 module.exports = router;
