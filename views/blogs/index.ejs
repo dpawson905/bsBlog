@@ -25,9 +25,13 @@
                     <i><%= blog.author.firstName.charAt(0).toUpperCase() + blog.author.firstName.slice(1) %> 
                     <%= blog.author.lastName.charAt(0).toUpperCase() + blog.author.lastName.slice(1) %></i>
                   </p>
-                  <p class="small lead">Created: <i><%= new Date().toDateString() %></i></p>
-                  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Perspiciatis assumenda esse optio aliquid labore fugiat molestias ea nisi! Explicabo libero iure eos soluta animi. Iusto inventore totam maxime omnis? Neque!</p>
-                  <a href="#" class="btn btn-primary">Go somewhere</a>
+                  <p class="small lead">Created: <i><%= moment(blog.publishDate).format('MMM Do, YYYY') %></i></p>
+                  <% if(blog.content.startsWith('```') || blog.content.startsWith('![Image]')) { %>
+                    <p>Content either begins with inline code, a code block or an Image. Click the button below to view content</p>
+                  <% } else { %>
+                    <p><%- entities.decode(converter.makeHtml(blog.content)) %></p>
+                  <% } %>
+                  <a href="/blogs/blog/<%= blog.slug %>" class="btn btn-primary">Go somewhere</a>
                 </div>
               </div>
             </div>
@@ -45,7 +49,7 @@
   <script src="/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
   <script src="/javascripts/main.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js" integrity="sha256-aYTdUrn6Ow1DDgh5JTc3aDGnnju48y/1c8s1dgkYPQ8=" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <!-- <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script> -->
   <script>hljs.initHighlightingOnLoad();</script>
   </body>
 </html>

@@ -2,6 +2,8 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const User = require('./user');
 
+const date = Date.now();
+
 const BlogSchema = new Schema({
   author: {
     type: mongoose.Schema.Types.ObjectId,
@@ -33,8 +35,7 @@ const BlogSchema = new Schema({
     trim: true
   },
   publishDate: {
-    type: Date,
-    default: Date.now
+    type: Date
   },
   featured: {
     type: Boolean

@@ -16,37 +16,23 @@ function checkPasswordMatch() {
       .html("Passwords match.");
 }
 
-var $nav = $(".fixed-top");
-var $nav1 = $(".fixed-bottom");
-var $navHeight = $(".header-img");
-var $profileHeight = $(".profile-hero");
 
 $(document).ready(function() {
+  var $nav = $(".fixed-top");
+  var $nav1 = $(".fixed-bottom");
+
+  var $navHeight = $(".header-img");
+  var $profileHeight = $(".profile-hero");
+
   $(document).scroll(function() {
     $nav.toggleClass(
       "scrolled",
-      $(this).scrollTop() > $navHeight.height() - 50
-    );
-    $nav.toggleClass(
-      "scrolled",
-      $(this).scrollTop() > $profileHeight.height() - 100
+      $(this).scrollTop() > $navHeight.height() - 50 || $(this).scrollTop() > $profileHeight.height()
     );
     $nav1.toggleClass("scrolled", $(this).scrollTop() > $nav1.height());
   });
 
   $("#password2, #checkPw").keyup(checkPasswordMatch);
-
-  function getDocHeight() {
-    var D = document;
-    return Math.max(
-      D.body.scrollHeight,
-      D.documentElement.scrollHeight,
-      D.body.offsetHeight,
-      D.documentElement.offsetHeight,
-      D.body.clientHeight,
-      D.documentElement.clientHeight
-    );
-  }
 
   window.setTimeout(function () {
     $('.toast')

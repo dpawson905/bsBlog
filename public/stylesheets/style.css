@@ -157,6 +157,10 @@ hr.style-two {
 .CodeMirror-fullscreen {
   z-index: 700; }
 
+.card-body img {
+  max-width: 100%;
+  height: auto; }
+
 /* END BLOG CSS */
 /* BEGIN PROFILE CSS */
 .profile-hero {

@@ -13,6 +13,7 @@ const MongoDBStore = require('connect-mongo')(session);
 const passport = require('passport');
 const methodOverride = require('method-override');
 const sassMiddleware = require('node-sass-middleware');
+const expressSanitizer = require('express-sanitizer');
 
 // DB MODEL FILES
 const User = require('./models/user.js');
@@ -54,6 +55,7 @@ app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
 app.use(express.json());
+app.use(expressSanitizer());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(
