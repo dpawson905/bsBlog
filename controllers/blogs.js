@@ -23,7 +23,6 @@ const converter = new showdown.Converter({
   ]
 });
 
-
 module.exports = {
   async getBlogs(req, res, next) {
     const blogs = await Blog.find({ 
@@ -50,6 +49,7 @@ module.exports = {
 
   async postNewBlog(req, res, next) {
     try {
+      req.body.title = req.sanitize(req.body.title);
       let tags = req.body.tags;
       req.body.tags = tags.split(',').map(tag => tag.trim());
       req.body.author = req.user._id;

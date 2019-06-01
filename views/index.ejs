@@ -1,21 +1,21 @@
 <% include ./partials/header %>
   <% include ./partials/hero %>
   <main>
-    <div class="container">
+    <div class="container-fluid custom-container">
       <div class="row">
         <div class="col-12">
           <h1 class="text-center">What is <%= title %></h1>
           <hr class="style-two">
           <div class="row mt-2">
             <div class="col-md-6 mx-auto my-auto">
-              <i class="fas fa-user-edit fa-3x d-flex justify-content-center mb-2 text-primary"></i>
+              <i class="fas fa-user-edit fa-3x d-flex justify-content-center my-3 text-primary"></i>
               <h2 class="lead"><%= title %> is exactly what the title says...</h2>
               <p><%= title %> uses a very simple and user friendly text editor that allows you to input code blocks, online images and allows full screen editing and previews.</p>
               <p>You can also just type normal text like you would in a blog... Either way, it's dead simple to use and the end result looks amazing!</p>
             </div>
             <div class="col-md-6">
               <pre class="">Formatted Code Example
-                <code class="prettyprint format-code shadow">
+                <code class="prettyprint format-code shadow-sm">
                     $(document).ready(function () { 
                       $(document).scroll(function () { 
                         var $nav = $(".fixed-top"); 
@@ -37,12 +37,16 @@
           </div>
           <div class="row">
             <div class="col-md-6">
-              <img src="/images/js.jpeg" alt="Code Image" class="img-fluid shadow rounded">
+              <img src="/images/js.jpeg" alt="Code Image" class="img-fluid shadow-lg rounded">
             </div>
-            <div class="col-md-6 mx-auto my-auto text-right">
-              <i class="fab fa-node fa-3x d-flex justify-content-center mb-2 text-primary"></i>
-              <h2 class="lead"><%= title %> is built using node.js...</h2>
-              <p><%= title %> is fast, easy to use and open source.</p>
+            <div class="col-md-6 mx-auto my-auto">
+              <p class="d-flex justify-content-center my-3 text-primary">
+                <i class="fab fa-node fa-3x mr-2"></i>&nbsp;
+                <i class="fas fa-database fa-3x mr-2"></i>&nbsp;
+                <i class="fab fa-bootstrap fa-3x mr-2"></i>&nbsp;
+              </p>
+              <h2 class="lead"><%= title %> is built using Node.js, MongoDB, KickBox, Bootstrap 4 and more...</h2>
+              <p><%= title %> is fast, easy to use and open source. It also uses the latest (at the moment) version of Bootstrap</p>
             </div>
           </div>
           <div class="row mt-5">
