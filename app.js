@@ -105,6 +105,7 @@ app.use(async (req, res, next) => {
   res.locals.success = req.flash('success');
   res.locals.error = req.flash('error');
   res.locals.title = 'SimpleBlog';
+  res.locals.url = '';
   res.locals.currentUser = req.user;
   res.locals.isAuthenticated = req.user ? true : false;
   next();
@@ -112,7 +113,7 @@ app.use(async (req, res, next) => {
 
 app.use('/', indexRouter);
 app.use('/blogs', blogsRouter);
-app.use('/blogs/:slug', blogRouter);
+app.use('/blogs/blog', blogRouter);
 app.use('/users', usersRouter);
 
 // catch 404 and display message to user
