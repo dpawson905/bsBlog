@@ -25,12 +25,12 @@ $(document).ready(function() {
   var $profileHeight = $(".profile-hero");
 
   $(document).scroll(function() {
-    if (url !== 'blog') {
+    
       $nav.toggleClass(
         "scrolled",
         $(this).scrollTop() > $navHeight.height() - 50 || $(this).scrollTop() > $profileHeight.height()
       );
-    }
+    
     $nav1.toggleClass("scrolled", $(this).scrollTop() > $nav1.height());
   });
 

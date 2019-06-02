@@ -42,5 +42,14 @@
   <script src="/javascripts/main.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js" integrity="sha256-aYTdUrn6Ow1DDgh5JTc3aDGnnju48y/1c8s1dgkYPQ8=" crossorigin="anonymous"></script>
   <script>hljs.initHighlightingOnLoad();</script>
+  <script>
+    $(document).ready(function() {
+      var $nav = $(".fixed-top");      
+      if ("<%= url %>" == 'blog') {
+        $nav.removeClass("bg-transparent");
+        $nav.addClass("bg-dark")
+      }
+    })
+  </script>
   </body>
 </html>
