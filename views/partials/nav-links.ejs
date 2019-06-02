@@ -25,12 +25,10 @@
   <li class="nav-item">
     <a class="nav-link <%= typeof url !== 'undefined' && url === 'register' ? 'active animated bounce' : '' %>" href="/users/register">Register</a>
   </li>
-  <li class="nav-item">
-    <a class="nav-link link-fix" data-toggle="modal" data-target="#forgotPwModal">Forgot Password</a>
-  </li>
   </ul>
   <div class="">
-    <button class="btn btn-outline-success my-2 my-sm-0" data-toggle="modal" data-target="#loginModal" type="submit">Login</button>
+    <button class="btn btn-outline-success mr-2" data-toggle="modal" data-target="#loginModal" type="submit">Login</button>
+    <button class="btn btn-outline-info" data-toggle="modal" data-target="#forgotPwModal" type="submit">Forgot Password</button>
   </div>
   <% } %>
 </div>
