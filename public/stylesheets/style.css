@@ -182,6 +182,9 @@ hr.style-two {
 
 /* END PROFILE CSS */
 /* BEGIN HELPER/RANDOM CSS */
+.modal {
+  z-index: 3000; }
+
 .form-error {
   color: red;
   position: absolute; }
@@ -213,7 +216,9 @@ hr.style-two {
     left: 4vw;
     right: 5vw;
     min-width: 90vw;
-    max-width: 90vw; } }
+    max-width: 90vw; }
+  .custom-hide {
+    opacity: 0; } }
 
 /* END MEDIA QUERIES */
 
