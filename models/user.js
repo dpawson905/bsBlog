@@ -47,11 +47,17 @@ const UserSchema = new Schema({
 		secure_url: { type: String, default: '/images/no-user.jpg' },
 		public_id: String
   },
-  likes: {
-    type: Array,
+  following: {
+    author: {
+      type: [mongoose.Schema.Types.ObjectId],
+      ref: 'User'
+    },
   },
   followers: {
-    type: Array
+    author: {
+      type: [mongoose.Schema.Types.ObjectId],
+      ref: 'User'
+    },
   }
 }, { timestamps: true });
 
