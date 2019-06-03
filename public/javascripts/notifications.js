@@ -1,7 +1,7 @@
 
 
 $(document).ready(function() {
-  $.get('*', function(notifs) {
+  /* $.get('*', function(notifs) {
     notifs.forEach((noti) => {
       $( ".dropdown-item" ).append(
         `
@@ -12,5 +12,5 @@ $(document).ready(function() {
         `
       );
     })
-  })
+  }) */
 });

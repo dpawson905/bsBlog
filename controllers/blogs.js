@@ -25,15 +25,15 @@ const converter = new showdown.Converter({
 });
 
 module.exports = {
-  async getNotifications(req, res, next) {
-    let notifs = await Notification.find({
+  // async getNotifications(req, res, next) {
+  //   let notifs = await Notification.find({
       
-    });
-    if (req.xhr) {
-      return res.json(notifs);
-    }
-    next();
-  },
+  //   });
+  //   if (req.xhr) {
+  //     return res.json(notifs);
+  //   }
+  //   next();
+  // },
 
   async getBlogs(req, res, next) {
     const blog = await Blog.find({});
