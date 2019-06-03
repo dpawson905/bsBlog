@@ -14,6 +14,16 @@ module.exports = {
     }
   },
 
+  isLoggedIn: (req, res, next) => {
+    if (req.isAuthenticated()) {
+      return next();
+    } else {
+      req.flash('error', 'You must be logged in to view this page');
+      req.session.redirectTo = req.originalUrl;
+      res.redirect('/');
+    }
+  },
+
   isNotAuthenticated: (req, res, next) => {
     if (req.isAuthenticated()) {
       return next();

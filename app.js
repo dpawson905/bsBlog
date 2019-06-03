@@ -114,7 +114,7 @@ app.use(async (req, res, next) => {
   next();
 });
 
-app.all('*', asyncErrorHandler(getNotifications));
+// app.all('*', asyncErrorHandler(getNotifications));
 app.use('/', indexRouter);
 app.use('/blogs', blogsRouter);
 app.use('/blogs/blog', blogRouter);
@@ -123,7 +123,7 @@ app.use('/users', usersRouter);
 // catch 404 and display message to user
 app.use(function(req, res, next) {
   req.flash('error', 'That page does not exist.');
-  res.redirect('back');
+  res.redirect('/');
   next();
 });
 
@@ -131,7 +131,7 @@ app.use(function(req, res, next) {
 app.use(function(err, req, res, next) {
   debug(err.stack);
   req.flash('error', err.message);
-  res.redirect('back');
+  res.redirect('/');
 });
 
 module.exports = app;

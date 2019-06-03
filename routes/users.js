@@ -17,7 +17,8 @@ const {
 } = require('../controllers/profile');
 
 const {
-  asyncErrorHandler
+  asyncErrorHandler,
+  isLoggedIn
 } = require('../middleware');
 
 /* Get Started */
@@ -36,6 +37,6 @@ router.post('/login', asyncErrorHandler(postLogin));
 router.get('/logout', logOut);
 
 /* GET user profile */
-router.get('/user/:id', asyncErrorHandler(getProfile));
+router.get('/user/:id', isLoggedIn, asyncErrorHandler(getProfile));
 
 module.exports = router;
