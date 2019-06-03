@@ -44,6 +44,10 @@ const BlogSchema = new Schema({
   archived: {
     type: Boolean,
     default: false
+  },
+  private: {
+    type: Boolean,
+    default: false
   }
 }, { timestamps: true });
 
