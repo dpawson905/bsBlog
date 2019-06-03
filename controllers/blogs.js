@@ -25,6 +25,10 @@ const converter = new showdown.Converter({
 
 module.exports = {
   async getBlogs(req, res, next) {
+    const blog = await Blog.find({});
+    blog.forEach((b) => {
+      console.log(b.slug)
+    })
     const blogs = await Blog.find({ 
       author: {
         $eq: req.user._id
@@ -65,7 +69,19 @@ module.exports = {
       }
       req.body.content = entities.encode(req.body.content);
       req.body.slug = await slug(moment(Date.now()).format("DD-MM-YYYY") + '-' + req.body.title);
-      console.log(req.body)
+      const slugCheck = await Blog.findOne({slug: req.body.slug});
+      if (slugCheck) {
+        req.flash('error', 'There is already a blog with this title/slug.')
+        return res.redirect('back');
+      }
+      if (req.body.featured) {
+        const featureCheck = await Blog.findOne({ featured: true });
+        if (featureCheck) {
+          featureCheck.featured = false
+          await featureCheck.save()
+        }
+        req.body.featured = true
+      } 
       await Blog.create(req.body);
       req.flash('success', 'Blog created Successfully');
       res.redirect('/blogs');

@@ -38,12 +38,18 @@ const BlogSchema = new Schema({
     type: Date
   },
   featured: {
-    type: Boolean
+    type: Boolean,
+    default: false
+  },
+  archived: {
+    type: Boolean,
+    default: false
   }
 }, { timestamps: true });
 
 BlogSchema.index({
-  title: 'text'
+  title: 'text',
+  tags: 'text'
 });
 
 // pre-hook middleware to populate author in question index routes
