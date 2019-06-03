@@ -15,6 +15,9 @@ const methodOverride = require('method-override');
 const sassMiddleware = require('node-sass-middleware');
 const expressSanitizer = require('express-sanitizer');
 
+const {asyncErrorHandler} = require('./middleware')
+const {getNotifications} = require('./controllers/blogs');
+
 // DB MODEL FILES
 const User = require('./models/user.js');
 
@@ -111,6 +114,7 @@ app.use(async (req, res, next) => {
   next();
 });
 
+app.all('*', asyncErrorHandler(getNotifications));
 app.use('/', indexRouter);
 app.use('/blogs', blogsRouter);
 app.use('/blogs/blog', blogRouter);
