@@ -47,18 +47,18 @@ const UserSchema = new Schema({
 		secure_url: { type: String, default: '/images/no-user.jpg' },
 		public_id: String
   },
-  following: {
-    author: {
-      type: [mongoose.Schema.Types.ObjectId],
+  following: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
       ref: 'User'
-    },
-  },
-  followers: {
-    author: {
-      type: [mongoose.Schema.Types.ObjectId],
+    }
+  ],
+  followers: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
       ref: 'User'
-    },
-  }
+    }
+  ]
 }, { timestamps: true });
 
 UserSchema.plugin(passportLocalMongoose, {
