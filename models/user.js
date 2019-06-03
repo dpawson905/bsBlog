@@ -70,4 +70,24 @@ UserSchema.plugin(passportLocalMongoose, {
   maxAttempts: 10
 });
 
+// pre-hook middleware to populate author in question index routes
+UserSchema.pre('find', function(next) {
+  this.populate('followers');
+  next();
+});
+
+UserSchema.pre('findOne', function(next) {
+  this.populate('followers');
+  next();
+});
+UserSchema.pre('find', function(next) {
+  this.populate('following');
+  next();
+});
+
+UserSchema.pre('findOne', function(next) {
+  this.populate('following');
+  next();
+});
+
 module.exports = mongoose.model('User', UserSchema);
