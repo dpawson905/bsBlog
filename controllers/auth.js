@@ -1,3 +1,4 @@
+const debug = require('debug')('bootstrapblogapp:auth');
 const passport = require('passport');
 const sgMail = require('@sendgrid/mail');
 
@@ -34,18 +35,19 @@ module.exports = {
   async postRegisterUser(req, res, next) {
     const { firstName, lastName, email, username } = req.body;
     let error;
+    
     try {
       const user = await User.findOne({ email: req.body.email });
-
-      const msg = {
+      
+      /* const msg = {
         from: 'SimpleBlog Admin <dpawson905@gmail.com>',
-        to: user.email,
-        subject: `Welcome to SimpleBlog ${user.firstName}`,
-        text: `Hello ${user.username} welcome to SimpleBlog.`.replace(
+        to: req.body.email,
+        subject: `Welcome to SimpleBlog ${req.body.firstName}`,
+        text: `Hello ${req.body.username} welcome to SimpleBlog.`.replace(
           /        /g,
           ''
         )
-      };
+      }; */
 
       if (user) {
         req.flash(
@@ -56,6 +58,7 @@ module.exports = {
       }
 
       if (process.env.KICKBOX_API_KEY) {
+        debug('Kickbox Enabled');
         await kickbox.verify(req.body.email, async (err, response) => {
           if (err) {
             req.flash('error', err.message);
@@ -74,7 +77,7 @@ module.exports = {
                 subTitle: '- Register'
               });
             }
-            console.log(req.file);
+            
             if (req.file) {
               const { secure_url, public_id } = req.file;
               req.body.image = {
@@ -86,7 +89,7 @@ module.exports = {
               new User(req.body),
               req.body.password
             );
-            await sgMail.send(msg);
+            // await sgMail.send(msg);
             await req.login(user, function(err) {
               if (err) return next(err);
               req.flash('success', `Welcome to SimpleBlog ${user.username}`);
@@ -96,7 +99,6 @@ module.exports = {
             });
           } else {
             error = 'This is not a valid email address';
-            console.log(req.body);
             res.render('auth/register', {
               firstName,
               lastName,
@@ -109,6 +111,7 @@ module.exports = {
           }
         });
       } else {
+        debug('Kickbox Disabled');
         if (req.file) {
           const { secure_url, public_id } = req.file;
           req.body.image = {
@@ -116,9 +119,9 @@ module.exports = {
             public_id
           };
         }
-        console.log(req.body);
+        debug(req.body);
         const user = await User.register(new User(req.body), req.body.password);
-        await sgMail.send(msg);
+        /* await sgMail.send(msg); */
         await req.login(user, function(err) {
           if (err) return next(err);
           req.flash('success', `Welcome to SimpleBlog ${user.username}`);
@@ -129,6 +132,7 @@ module.exports = {
       }
     } catch (err) {
       deleteProfileImage(req);
+      debug(err)
       req.flash('error', err.message);
       return res.redirect('/users/register');
     }

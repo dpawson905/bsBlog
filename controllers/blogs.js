@@ -1,6 +1,5 @@
 const Blog = require('../models/blog.js');
 const User = require('../models/user');
-const Notification = require('../models/notification');
 const moment = require('moment');
 const slug = require('slug');
 const Entities = require('html-entities').XmlEntities;
@@ -25,15 +24,6 @@ const converter = new showdown.Converter({
 });
 
 module.exports = {
-  // async getNotifications(req, res, next) {
-  //   let notifs = await Notification.find({
-      
-  //   });
-  //   if (req.xhr) {
-  //     return res.json(notifs);
-  //   }
-  //   next();
-  // },
 
   async getBlogs(req, res, next) {
     const blog = await Blog.find({});
@@ -94,11 +84,7 @@ module.exports = {
         req.body.featured = true
       }
       
-      let blog = await Blog.create(req.body);
-      await Notification.create({
-        author: req.user._id,
-        blogId: blog._id
-      });
+      await Blog.create(req.body);
       req.flash('success', 'Blog created Successfully');
       res.redirect('/blogs');
     } catch(err) {
