@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "dev": "DEBUG=bootstrapblogapp:* nodemon"
+    "dev": "DEBUG=bootstrapblogapp:* nodemon",
+    "dev-win": "set DEBUG=bootstrapblogapp:* && nodemon"
   },
   "dependencies": {
     "@sendgrid/mail": "^6.4.0",
