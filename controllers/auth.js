@@ -187,6 +187,50 @@ module.exports = {
     });
   },
 
+  getNewToken(req, res, next) {
+    res.render('auth/newToken', {
+      userInfo: {
+        email: "",
+      },
+      title: 'Resend Token',
+      subTitle: ''
+    });
+  },
+
+  async postNewToken(req, res, next) {
+    const userInfo = req.body;
+    const user = await User.findOne({ email: userInfo.email });
+    const token = await Token.findOne({ _userId: user.id });
+    if (!user) {
+      const error = "This email address does not exist!"
+      return res.render('auth/newToken', { error, userInfo });
+    }
+    if(token){
+      await token.remove();
+    }
+    const userToken = new Token({
+      _userId: user._id,
+      token: crypto.randomBytes(256).toString("hex")
+    });
+    await userToken.save();
+    const msg = {
+      from: "SimpleBLog <darrellpawson@protonmail.com>",
+      to: user.email,
+      subject: `Welcome to SimpleBlog ${
+        user.firstName
+      } - Validate your account!`,
+      html: `
+            <h1>Hey There</h1>
+            <p>It looks like you have registered for an account on our site, please click the link below to validate your account.</p>
+            <p><a href="http://${req.headers.host}/users/validate-account?token=${userToken.token}">Validate your account</a></p>
+          `
+    };
+    await sgMail.send(msg);
+    req.flash('success', 'Thanks for registering, Please check your email to verify your account.');
+    return res.redirect("/");
+
+  },
+
   async postLogin(req, res, next) {
     const user = await User.findOne({ username: req.body.username });
     if (!user) {

@@ -9,6 +9,8 @@ const {
   getRegister,
   postRegisterUser,
   validateNewAccount,
+  getNewToken,
+  postNewToken,
   postLogin,
   logOut
 } = require('../controllers/auth');
@@ -33,6 +35,12 @@ router.post('/register', upload.single('image'), asyncErrorHandler(postRegisterU
 
 /* GET validate-account */
 router.get('/validate-account', asyncErrorHandler(validateNewAccount));
+
+/* GET new-token */
+router.get('/new-token', getNewToken);
+
+/* POST new-token */
+router.post('/new-token', asyncErrorHandler(postNewToken));
 
 /* POST login */
 router.post('/login', asyncErrorHandler(postLogin));
