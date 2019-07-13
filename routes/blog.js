@@ -5,7 +5,10 @@ const upload = multer({ storage });
 const router = express.Router();
 
 const {
-  asyncErrorHandler
+  asyncErrorHandler,
+  isLoggedIn,
+  isAuthenticated,
+  isNotAuthenticated
 } = require('../middleware');
 
 const {
@@ -13,6 +16,6 @@ const {
 } = require('../controllers/blog');
 
 /* GET home page. */
-router.get('/:slug', asyncErrorHandler(getBlog));
+router.get('/:slug', isNotAuthenticated, asyncErrorHandler(getBlog));
 
 module.exports = router;
