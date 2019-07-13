@@ -8,6 +8,7 @@ const {
   getStarted,
   getRegister,
   postRegisterUser,
+  validateNewAccount,
   postLogin,
   logOut
 } = require('../controllers/auth');
@@ -29,6 +30,9 @@ router.get('/register', getRegister);
 
 /* POST user */
 router.post('/register', upload.single('image'), asyncErrorHandler(postRegisterUser));
+
+/* GET validate-account */
+router.get('/validate-account', asyncErrorHandler(validateNewAccount));
 
 /* POST login */
 router.post('/login', asyncErrorHandler(postLogin));

@@ -13,7 +13,8 @@ function checkPasswordMatch() {
     $("#checkPw")
       .addClass("form-success")
       .removeClass("form-error")
-      .html("Passwords match.");
+      .html("Passwords match."),
+    $('#registerButton').prop("disabled", false);
 }
 
 

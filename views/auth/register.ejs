@@ -10,13 +10,13 @@
               <div class="col-md-6">
                 <div class="form-group">
                   <label for="firstName">First Name</label>
-                  <input type="text" class="form-control" id="firstName" name="firstName" placeholder="Enter First Name" value="<%= firstName %>">
+                  <input type="text" class="form-control" id="firstName" name="firstName" placeholder="Enter First Name" value="<%= userInfo.firstName %>">
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="form-group">
                   <label for="lastName">Last Name</label>
-                  <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Enter Last Name" value="<%= lastName %>">
+                  <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Enter Last Name" value="<%= userInfo.lastName %>">
                 </div>
               </div>
             </div>
@@ -24,13 +24,13 @@
               <div class="col-md-6">
                 <div class="form-group">
                   <label for="email">Email Address</label>
-                  <input type="email" class="form-control" id="email" name="email" placeholder="Enter Email Address" value="<%= email %>">
+                  <input type="email" class="form-control" id="email" name="email" placeholder="Enter Email Address" value="<%= userInfo.email %>">
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="form-group">
                   <label for="username">Username</label>
-                  <input type="text" class="form-control" id="username" name="username" placeholder="Enter Username" value="<%= username %>">
+                  <input type="text" class="form-control" id="username" name="username" placeholder="Enter Username" value="<%= userInfo.username %>">
                 </div>
               </div>
             </div>
@@ -52,12 +52,12 @@
             <div class="row">
               <div class="col-md-6">
                 <div class="form-group">
-                  <label for="image">Profile Image</label>
+                  <label id="imageLabel" for="image">Profile Image</label>
                   <input type="file" class="form-control-file" id="image" name="image">
                 </div>
               </div>
               <div class="col-md-6 text-center">
-                <button type="submit" class="btn btn-primary btn-block mt-3">Register</button>
+                <button id="registerButton" type="submit" class="btn btn-primary btn-block mt-3" disabled>Register</button>
               </div>
             </div>
           </form>
@@ -68,6 +68,10 @@
   <script>
     $(document).ready(function(){
       $(this).scrollTop(1000);
+      if('<%= !kb_validate %>') {
+        document.getElementById("image").disabled = true;
+        document.getElementById("imageLabel").innerHTML = 'Sorry, uploading an image is diasbled';
+      }
     });
   </script>
 <% include ../partials/footer %>

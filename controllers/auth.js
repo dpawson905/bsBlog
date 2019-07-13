@@ -1,7 +1,7 @@
 const debug = require('debug')('bootstrapblogapp:auth');
 const passport = require('passport');
 const sgMail = require('@sendgrid/mail');
-
+const crypto = require('crypto');
 const { cloudinary } = require('../cloudinary');
 const { deleteProfileImage } = require('../middleware');
 const kickbox = require('kickbox')
@@ -9,6 +9,9 @@ const kickbox = require('kickbox')
   .kickbox();
 
 const User = require('../models/user');
+const Token = require('../models/token');
+
+const kb_validate = process.env.KICKBOX_API_KEY;
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
@@ -23,119 +26,165 @@ module.exports = {
 
   getRegister(req, res, next) {
     res.render('auth/register', {
-      firstName: '',
-      lastName: '',
-      email: '',
-      username: '',
       subTitle: '- Register',
-      url: 'register'
+      url: 'register',
+      userInfo: {
+        firstName: "",
+        lastName: "",
+        email: "",
+        username: ""
+      },
+      kb_validate
     });
   },
 
   async postRegisterUser(req, res, next) {
-    const { firstName, lastName, email, username } = req.body;
-    let error;
-    
-    try {
-      const user = await User.findOne({ email: req.body.email });
-      
-      /* const msg = {
-        from: 'SimpleBlog Admin <dpawson905@gmail.com>',
-        to: req.body.email,
-        subject: `Welcome to SimpleBlog ${req.body.firstName}`,
-        text: `Hello ${req.body.username} welcome to SimpleBlog.`.replace(
-          /        /g,
-          ''
-        )
-      }; */
-
-      if (user) {
-        req.flash(
-          'error',
-          'This email address is in use. Please login using your email address.'
-        );
-        return res.redirect('/');
-      }
-
-      if (process.env.KICKBOX_API_KEY) {
-        debug('Kickbox Enabled');
-        await kickbox.verify(req.body.email, async (err, response) => {
-          if (err) {
-            req.flash('error', err.message);
-            return res.redirect('/users/register');
+    const userInfo = req.body;
+    if (process.env.KICKBOX_API_KEY) {
+      debug('Kickbox enabled');
+      await kickbox.verify(userInfo.email, async (err, response) => {
+        if (response.body.result == 'deliverable') {
+          if (req.file) {
+            const { secure_url, public_id } = req.file;
+            req.body.image = {
+              secure_url,
+              public_id
+            };
           }
-          if (response.body.result == 'deliverable') {
-            if (req.body.password !== req.body.password2) {
-              error = 'Passwords to not match';
-              res.render('auth/register', {
-                firstName,
-                lastName,
-                email,
-                username,
-                error,
-                url: 'register',
-                subTitle: '- Register'
-              });
-            }
-            
-            if (req.file) {
-              const { secure_url, public_id } = req.file;
-              req.body.image = {
-                secure_url,
-                public_id
-              };
-            }
-            const user = await User.register(
-              new User(req.body),
-              req.body.password
-            );
-            // await sgMail.send(msg);
-            await req.login(user, function(err) {
+          try {
+            const newUser = new User({
+              firstName: userInfo.firstName,
+              lastName: userInfo.lastName,
+              email: userInfo.email,
+              username: userInfo.username,
+              expiresDateCheck: null,
+              isVerified: true
+            });
+            delete userInfo.password2;
+            const user = await User.register(newUser, userInfo.password);
+            await req.login(user, (err) => {
               if (err) return next(err);
               req.flash('success', `Welcome to SimpleBlog ${user.username}`);
               const redirectUrl = req.session.redirectTo || '/';
               delete req.session.redirectTo;
               res.redirect(redirectUrl);
             });
-          } else {
-            error = 'This is not a valid email address';
-            res.render('auth/register', {
-              firstName,
-              lastName,
-              email,
-              username,
-              error,
-              url: 'register',
-              subTitle: '- Register'
-            });
+          } catch(err) {
+            if (err.name === "MongoError" && err.code === 11000) {
+              deleteProfileImage(req);
+              const error = 'Sorry, this email address is already in use.';
+              return res.render("auth/register", { 
+                error, 
+                userInfo, 
+                subTitle: '- Register',
+                url: 'register', 
+                kb_validate
+              });
+            } else {
+              deleteProfileImage(req);
+              const error = err.message;
+              return res.render("auth/register", { 
+                error, 
+                userInfo, 
+                subTitle: '- Register',
+                url: 'register',
+                kb_validate
+              });
+            }
           }
-        });
-      } else {
-        debug('Kickbox Disabled');
-        if (req.file) {
-          const { secure_url, public_id } = req.file;
-          req.body.image = {
-            secure_url,
-            public_id
-          };
+        } else {
+          const error = 'Sorry, this email address is invalid!';
+          return res.render("auth/register", { 
+            error, 
+            userInfo, 
+            subTitle: '- Register',
+            url: 'register',
+            kb_validate
+          });
         }
-        debug(req.body);
-        const user = await User.register(new User(req.body), req.body.password);
-        /* await sgMail.send(msg); */
-        await req.login(user, function(err) {
-          if (err) return next(err);
-          req.flash('success', `Welcome to SimpleBlog ${user.username}`);
-          const redirectUrl = req.session.redirectTo || '/';
-          delete req.session.redirectTo;
-          res.redirect(redirectUrl);
+      })
+    } else {
+      debug('Kickbox disabled');
+      try {
+        const newUser = new User({
+          firstName: userInfo.firstName,
+          lastName: userInfo.lastName,
+          email: userInfo.email,
+          username: userInfo.username,
+          expiresDateCheck: Date.now(),
+          isVerified: false
         });
+        delete userInfo.password2;
+        const user = await User.register(newUser, userInfo.password);
+        const userToken = new Token({
+          _userId: user._id,
+          token: crypto.randomBytes(256).toString("hex")
+        });
+        await userToken.save();
+        const msg = {
+          from: "SimpleBLog <darrellpawson@protonmail.com>",
+          to: user.email,
+          subject: `Welcome to SimpleBlog ${
+            user.firstName
+          } - Validate your account!`,
+          html: `
+                <h1>Hey There</h1>
+                <p>It looks like you have registered for an account on our site, please click the link below to validate your account.</p>
+                <p><a href="http://${req.headers.host}/users/validate-account?token=${userToken.token}">Validate your account</a></p>
+              `
+        };
+        await sgMail.send(msg);
+        req.flash('success', 'Thanks for registering, Please check your email to verify your account.');
+        return res.redirect("/");
+      } catch(err) {
+        if (err.name === "MongoError" && err.code === 11000) {
+          deleteProfileImage(req);
+          const error = 'Sorry, this email address is already in use.';
+          return res.render("auth/register", { 
+            error, 
+            userInfo, 
+            subTitle: '- Register',
+            url: 'register',
+            kb_validate 
+          });
+        } else {
+          deleteProfileImage(req);
+          console.log(err)
+          const error = err.message;
+          return res.render("auth/register", { 
+            error, 
+            userInfo, 
+            subTitle: '- Register',
+            url: 'register',
+            kb_validate 
+          });
+        }
       }
-    } catch (err) {
-      deleteProfileImage(req);
-      debug(err)
-      req.flash('error', err.message);
-      return res.redirect('/users/register');
     }
+  },
+
+  async validateNewAccount(req, res, next) {
+    const token = Token.findOne({ token: req.query.token });
+    if (!token) {
+      req.flash('error', 'This token is either invalid or expired. Please request a new one.');
+      return res.redirect('/');
+    }
+    let user = await User.findOne({ id: token._userId });
+    if (!user) {
+      req.flash('error', 'Hmmmm, for some reason there is no user associated with that token. Please contact us so we can look into this.');
+      return res.redirect('back');
+    }
+    user.isVerified = true;
+    user.expiresDateCheck = null;
+    await user.save();
+    await token.remove();
+    await req.login(user, (err) => {
+      if (err) return next(err);
+      req.flash('success', `Welcome to SimpleBlog ${user.username}`);
+      const redirectUrl = req.session.redirectTo || '/';
+      delete req.session.redirectTo;
+      res.redirect(redirectUrl);
+    });
   },
 
   async postLogin(req, res, next) {
