@@ -63,4 +63,12 @@
     <% include ./partials/forgotPwModal %>
     <% include ./partials/loginModal %>
   <% } %>
-<% include ./partials/footer %>  
+<% include ./partials/footer %> 
+
+<script>
+  if ('<%= userCheck %>' == 'noUser') {
+    $(window).on('load',function(){
+      $('#loginModal').modal('show');
+    });
+  } 
+</script>

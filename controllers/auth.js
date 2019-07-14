@@ -17,10 +17,14 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 module.exports = {
   async getStarted(req, res, next) {
+    const userCheck = 'noUser';
     if (req.user) {
       res.redirect("/blogs");
     } else {
-      res.redirect("/users/register");
+      res.render("index", { 
+        userCheck,
+        url: 'home'
+      });
     }
   },
 
