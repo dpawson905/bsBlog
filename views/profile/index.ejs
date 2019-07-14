@@ -3,7 +3,7 @@
   <div class="container-fluid footer-fix">
     <div class="jumbotron profile-wrapper bg-custom">
       <div class="row">
-        <div class="col-xl-4 col-1g-12 col-12 mt-5">
+        <div class="col-xl-4 col-1g-12 col-12 mt-1">
           <div class="card">
             <img src="<%= user.image.secure_url %>" class="card-img-top" alt="<%= user.username %>'s profile image">
             <div class="card-body">
@@ -11,17 +11,12 @@
               <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
             </div>
             <ul class="list-group list-group-flush">
-              <li class="list-group-item">Cras justo odio</li>
-              <li class="list-group-item">Dapibus ac facilisis in</li>
-              <li class="list-group-item">Vestibulum at eros</li>
+              <li class="list-group-item">Update Password Placeholder</li>
+              <li class="list-group-item">Delete Account Placeholder</li>
             </ul>
-            <div class="card-body">
-              <a href="#" class="card-link">Card link</a>
-              <a href="#" class="card-link">Another link</a>
-            </div>
           </div>
         </div>
-        <div class="col-xl-8 col-1g-12 col-12 mt-5">
+        <div class="col-xl-8 col-1g-12 col-12 mt-1">
           <div class="card p-4 h-100">
             <ul class="nav nav-tabs navbar-dark" id="myTab" role="tablist">
               <li class="nav-item">
@@ -35,16 +30,66 @@
             <!-- Tab panes -->
             <div class="tab-content mt-2 my-auto mx-auto">
               <div class="tab-pane active p3" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                <h1 class="text-center">Your most recent Blogs</h1>
-                <ul class="list-group list-group-flush">
-                  <li class="list-group-item">Cras justo odio <span class="float-right"><a href="#">View</a></span></li>
-                  <li class="list-group-item">Cras justo odio <span class="float-right"><a href="#">View</a></span></li>
-                  <li class="list-group-item">Cras justo odio <span class="float-right"><a href="#">View</a></span></li>
-                  <li class="list-group-item">Cras justo odio <span class="float-right"><a href="#">View</a></span></li>
-                  <li class="list-group-item">Cras justo odio <span class="float-right"><a href="#">View</a></span></li>
-                </ul>
+                <% if (!blogs.length) { %>
+                  <h1 class="text-center">You do not have any blogs just yet!</h1>
+                <% } else { %>
+                  <h1 class="text-center">Your most recent Blogs</h1>
+                  <ul class="list-group list-group-flush">
+                    <% blogs.forEach((blog) => { %>
+                      <li class="list-group-item"><%= blog.title %> <span class="float-right"><a href="/blogs/blog/<%= blog.slug %>">View</a></span></li>
+                    <% }) %>
+                  </ul>
+                <% } %>
               </div>
-              <div class="tab-pane p3" id="edit" role="tabpanel" aria-labelledby="edit-tab">123</div>
+              <div class="tab-pane p3" id="edit" role="tabpanel" aria-labelledby="edit-tab">
+                <div class="row">
+                  <div class="col-12">
+                    <h2 class="text-center">Update your profile</h2>
+                    <hr class="style-two">
+                    <form action="/users/user/<%= user.id %>" method="post"  enctype="multipart/form-data">
+                      <div class="row">
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <label for="firstName">First Name</label>
+                            <input type="text" class="form-control" id="firstName" name="firstName" placeholder="Enter First Name" value="<%= user.firstName %>">
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <label for="lastName">Last Name</label>
+                            <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Enter Last Name" value="<%= user.lastName %>">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" class="form-control" id="email" name="email" placeholder="Enter Email Address" value="<%= user.email %>">
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <label for="username">Username</label>
+                            <input type="text" class="form-control" id="username" name="username" placeholder="Enter Username" value="<%= user.username %>">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <label id="imageLabel" for="image">Profile Image</label>
+                            <input type="file" class="form-control-file" id="image" name="image">
+                          </div>
+                        </div>
+                        <div class="col-md-6 text-center">
+                          <button id="registerButton" type="submit" class="btn btn-primary btn-block mt-3" disabled>Update Account</button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

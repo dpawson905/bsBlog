@@ -29,7 +29,7 @@ hr.style-two {
 .hero-text-box {
   position: absolute;
   width: 100vw;
-  top: 50vh;
+  top: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -198,7 +198,7 @@ hr.style-two {
 .profile-wrapper {
   position: relative;
   max-width: 70vw;
-  margin: -5% auto 0 auto; }
+  margin: 5% auto 0 auto; }
 
 /* END PROFILE CSS */
 /* BEGIN HELPER/RANDOM CSS */

@@ -26,9 +26,11 @@
     <a class="nav-link <%= typeof url !== 'undefined' && url === 'register' ? 'active animated bounce' : '' %>" href="/users/register">Register</a>
   </li>
   </ul>
-  <div class="">
-    <button class="btn btn-outline-success mr-2" data-toggle="modal" data-target="#loginModal" type="submit">Login</button>
-    <button class="btn btn-outline-info" data-toggle="modal" data-target="#forgotPwModal" type="submit">Forgot Password</button>
-  </div>
+  <% if (url != 'register') { %>
+    <div class="">
+      <button class="btn btn-outline-success mr-2" data-toggle="modal" data-target="#loginModal" type="submit">Login</button>
+      <button class="btn btn-outline-info" data-toggle="modal" data-target="#forgotPwModal" type="submit">Forgot Password</button>
+    </div>
+  <% } %>
   <% } %>
 </div>
