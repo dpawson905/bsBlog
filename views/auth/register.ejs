@@ -68,11 +68,11 @@
   <script>
     $(document).ready(function(){
       $(this).scrollTop(1000);
-      if('<%= !kb_validate %>') {
+      if('<%= !kb_validate %>' !== 'undefined') {
         document.getElementById("image").disabled = true;
         document.getElementById("imageLabel").innerHTML = 'Sorry, uploading an image is diasbled';
-      }
+      } 
     });
   </script>
-  <% include ../partials/loginModal %>
+  
 <% include ../partials/footer %>
