@@ -233,7 +233,7 @@ module.exports = {
     });
     await userToken.save();
     const msg = {
-      from: "SimpleBLog <darrellpawson@protonmail.com>",
+      from: "SimpleBlog <darrellpawson@protonmail.com>",
       to: user.email,
       subject: `Welcome to SimpleBlog ${
         user.firstName
