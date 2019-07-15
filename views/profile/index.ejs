@@ -32,6 +32,7 @@
               <div class="tab-pane active p3" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                 <% if (!blogs.length) { %>
                   <h1 class="text-center">You do not have any blogs just yet!</h1>
+                  <p class="text-center p-3"><a href="/blogs/new-blog" class="btn btn-primary">Create a Blog</a></p>
                 <% } else { %>
                   <h1 class="text-center">Your most recent Blogs</h1>
                   <ul class="list-group list-group-flush">
@@ -46,7 +47,7 @@
                   <div class="col-12">
                     <h2 class="text-center">Update your profile</h2>
                     <hr class="style-two">
-                    <form action="/users/user/<%= user.id %>" method="post"  enctype="multipart/form-data">
+                    <form action="/users/user/<%= user._id %>?_method=PUT" method="post"  enctype="multipart/form-data">
                       <div class="row">
                         <div class="col-md-6">
                           <div class="form-group">
@@ -83,7 +84,7 @@
                           </div>
                         </div>
                         <div class="col-md-6 text-center">
-                          <button id="registerButton" type="submit" class="btn btn-primary btn-block mt-3" disabled>Update Account</button>
+                          <button type="submit" class="btn btn-primary btn-block mt-3">Update Account</button>
                         </div>
                       </div>
                     </form>

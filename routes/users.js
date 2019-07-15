@@ -16,7 +16,8 @@ const {
 } = require('../controllers/auth');
 
 const {
-  getProfile
+  getProfile,
+  putEditProfile
 } = require('../controllers/profile');
 
 const {
@@ -53,5 +54,8 @@ router.get('/logout', isNotAuthenticated, logOut);
 
 /* GET user profile */
 router.get('/user/:id', isNotAuthenticated, asyncErrorHandler(getProfile));
+
+/* PUT edit profile */
+router.put('/user/:id', upload.single('image'), isNotAuthenticated, asyncErrorHandler(putEditProfile));
 
 module.exports = router;

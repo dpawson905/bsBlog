@@ -262,6 +262,12 @@ module.exports = {
       req.flash("error", "Invalid Username");
       return res.redirect("/");
     }
+
+    if (!user.isVerified) {
+      req.flash('error', 'You have not validated your account. Please check your email to do so.');
+      return res.redirect('/');
+    }
+    
     await passport.authenticate("local", {
       successRedirect: "/",
       failureRedirect: "/users/login",

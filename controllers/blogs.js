@@ -68,6 +68,9 @@ module.exports = {
       if (!req.body.publishDate) {
         req.body.publishDate = Date.now();
       }
+      if (req.body.private) {
+        req.body.private = true;
+      }
       req.body.content = entities.encode(req.body.content);
       req.body.slug = await slug(moment(Date.now()).format("DD-MM-YYYY") + '-' + req.body.title);
       const slugCheck = await Blog.findOne({slug: req.body.slug});
