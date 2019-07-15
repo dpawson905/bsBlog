@@ -1,4 +1,5 @@
 <% include ../partials/header %>
+  <% include ../partials/modals/pwModal %>
   <div class="profile-hero"></div>
   <div class="container-fluid footer-fix">
     <div class="jumbotron profile-wrapper bg-custom">
@@ -11,8 +12,8 @@
               <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
             </div>
             <ul class="list-group list-group-flush">
-              <li class="list-group-item">Update Password Placeholder</li>
-              <li class="list-group-item">Delete Account Placeholder</li>
+              <li class="list-group-item bg-info"><button class="btn btn-block card-link text-white" data-toggle="modal" data-target="#pwModal">Change PW</button></li>
+              <li class="list-group-item bg-danger"><button class="btn btn-block card-link text-white" data-toggle="modal" data-target="#pwModal" disabled>Delete Account</button></li>
             </ul>
           </div>
         </div>

@@ -10,6 +10,7 @@ const {
   postRegisterUser,
   validateNewAccount,
   getNewToken,
+  changePassword,
   postNewToken,
   postLogin,
   logOut
@@ -57,5 +58,8 @@ router.get('/user/:id', isNotAuthenticated, asyncErrorHandler(getProfile));
 
 /* PUT edit profile */
 router.put('/user/:id', upload.single('image'), isNotAuthenticated, asyncErrorHandler(putEditProfile));
+
+/* PUT Change PW */
+router.put('/user/:id/pw-change', isNotAuthenticated, asyncErrorHandler(changePassword));
 
 module.exports = router;

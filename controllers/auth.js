@@ -270,10 +270,25 @@ module.exports = {
     
     await passport.authenticate("local", {
       successRedirect: "/",
-      failureRedirect: "/users/login",
+      failureRedirect: "/",
       successFlash: `Welcome back ${user.username}`,
       failureFlash: true
     })(req, res, next);
+  },
+
+  async changePassword(req, res, next) {
+    const user = await User.findById(req.user.id);
+    await user.setPassword(req.body.password, async(err) => {
+      if(err) {
+        req.flash('error', err.message);
+        return res.redirect('back');
+      }
+      user.attempts = 0;
+      user.expiresDateCheck = null;
+      await user.save();
+      req.flash('success', 'Password has been changed.');
+      res.redirect('back');
+    })
   },
 
   logOut(req, res, next) {
@@ -281,7 +296,3 @@ module.exports = {
     return res.redirect("/");
   }
 };
-
-function NoKB() {
-  
-}
