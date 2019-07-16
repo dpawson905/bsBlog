@@ -1,0 +1,117 @@
+<% include ../partials/header %>
+  <div class="profile-hero">
+    <div class="hero-text-box-2">        
+      <h1 class="capitolize"><%= blog.title %> <span class="h2"><%= blog.subTitle %></span></h1>
+    </div>
+  </div>
+  <main>
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <form action="/blogs/blog/<%= blog.slug %>?_method=PUT" method="post"  enctype="multipart/form-data">
+            <div class="row">
+              <div class="col-12">
+                <div class="form-group">
+                  <label for="title">Title</label>
+                  <input class="form-control" type="text" id="title" name="title" placeholder="Blog Title" value="<%= blog.title %>">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-12">
+                <label for="markdownArea">Body</label>
+                <textarea class="" id="markdownArea" rows="15" name="content"><%= blog.content %></textarea>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-4">
+                <div class="form-group">
+                  <label for="tags">Tags</label>
+                  <input type="text" class="form-control bootstrap-tagsinput" id="tags" name="tags" aria-describedby="tags" data-role="tagsinput" value="<%= blog.tags %>" required>
+                </div>
+              </div>
+              <div class="col-lg-4">
+                <div class="form-group">
+                  <label for="publishDate">Publish Date</label>
+                  <input type="text" class="form-control" id="publishDate" name="publishDate" value="<%= moment(blog.publishDate).format('MM-DD-YYYY') %>">
+                </div>
+              </div>
+              <div class="col-lg-4">
+                <div class="form-group mx-auto my-auto">
+                  <label for="image">Header Image</label>
+                  <input type="file" class="form-control-file" id="image" name="image">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <div class="form-group form-check form-check-inline">
+                  <input type="checkbox" class="form-check-input" id="featured" name="featured" <% if (blog.featured) { %> checked <% } %>>
+                  <label class="form-check-label" for="featured">Feature Post?</label>
+                </div>
+                <div class="form-group form-check form-check-inline">
+                  <input type="checkbox" class="form-check-input" id="private" name="private" <% if (blog.private) { %> checked <% } %>>
+                  <label class="form-check-label" for="private">Private Post?</label>
+                </div>
+                <div class="form-group form-check form-check-inline">
+                  <input type="checkbox" class="form-check-input" id="archived" name="archived" <% if (blog.archived) { %> checked <% } %>>
+                  <label class="form-check-label" for="archived">Archive?</label>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-12 text-center">
+                <button class="btn btn-primary btn-block my-3">Edit Blog</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <nav class="navbar fixed-bottom navbar-dark bg-dark d-none d-lg-block">
+    <a class="navbar-brand d-inline text-center d-inline-block" href="/"><i class="fas fa-blog text-primary"></i> SimpleBlog</a>
+    <a href="#" class="nav-link text-white d-inline-block float-right text-center">Copyright 2019 Darrell Pawson</a>
+  </nav>
+  
+  <script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
+  <script src="/javascripts/simplemde.min.js"></script>
+  <script src="/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/javascripts/tagsinput.js"></script>
+  <script src="/javascripts/main.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js" integrity="sha256-aYTdUrn6Ow1DDgh5JTc3aDGnnju48y/1c8s1dgkYPQ8=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  
+  <script>
+    var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+    $('#publishDate').datepicker({
+      uiLibrary: 'bootstrap4',
+      minDate: today,
+      maxDate: function() {
+        var date = new Date();
+        date.setDate(date.getDate() + 30);
+        return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+      },
+      iconsLibrary: 'fontawesome'
+    });
+  </script>
+  <script defer>
+    var simplemde = new SimpleMDE({
+      autoDownloadFontAwesome: true,
+      element: document.getElementById("markdownArea"),
+      showIcons: ["code", "heading-2", "heading-3"],
+      placeholder: 'Begin your blog here!',
+      renderingConfig: {
+        singleLineBreaks: true,
+        codeSyntaxHighlighting: true
+      },
+      shortcuts: {
+        "toggleBlockquote": "Ctrl-Alt--"
+      },
+      hideIcons: ['quote']
+    });
+  </script>
+  </body>
+</html>

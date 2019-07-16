@@ -12,10 +12,18 @@ const {
 } = require('../middleware');
 
 const {
-  getBlog
+  getBlog,
+  getEditBlog,
+  editBlog
 } = require('../controllers/blog');
 
 /* GET home page. */
 router.get('/:slug', isNotAuthenticated, asyncErrorHandler(getBlog));
+
+/* GET blog edit */
+router.get('/:slug/edit', isNotAuthenticated, asyncErrorHandler(getEditBlog));
+
+/* PUT edit blog */
+router.put('/:slug', upload.single('image'), isNotAuthenticated, asyncErrorHandler(editBlog));
 
 module.exports = router;

@@ -1,5 +1,6 @@
 const Blog = require('../models/blog.js');
 const User = require('../models/user');
+const crypto = require('crypto');
 const moment = require('moment');
 const slug = require('slug');
 const Entities = require('html-entities').XmlEntities;
@@ -27,9 +28,7 @@ module.exports = {
 
   async getBlogs(req, res, next) {
     const blog = await Blog.find({});
-    blog.forEach((b) => {
-      console.log(b.slug)
-    })
+    
     const blogs = await Blog.find({ 
       author: {
         $eq: req.user._id
@@ -72,11 +71,11 @@ module.exports = {
         req.body.private = true;
       }
       req.body.content = entities.encode(req.body.content);
-      req.body.slug = await slug(moment(Date.now()).format("DD-MM-YYYY") + '-' + req.body.title);
       const slugCheck = await Blog.findOne({slug: req.body.slug});
       if (slugCheck) {
-        req.flash('error', 'There is already a blog with this title/slug.')
-        return res.redirect('back');
+        req.body.slug = await slug(moment(Date.now()).format("DD-MM-YYYY") + '-' + req.body.title) + '-' + crypto.randomBytes(5).toString("hex");
+      } else {
+        req.body.slug = await slug(moment(Date.now()).format("DD-MM-YYYY") + '-' + req.body.title);
       }
       if (req.body.featured) {
         const featureCheck = await Blog.findOne({ featured: true });

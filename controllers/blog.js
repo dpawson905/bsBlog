@@ -19,7 +19,6 @@ const converter = new showdown.Converter({
 module.exports = {
   async getBlog(req, res, next) {
     const blog = await Blog.findOne({ slug: req.params.slug });
-    console.log(blog);
     let decodeBlog = entities.decode(blog.content);
     blog.content = await converter.makeHtml(decodeBlog);
     res.render('blogs/view', {
@@ -29,14 +28,31 @@ module.exports = {
     });
   },
 
+  async getEditBlog(req, res, next) {
+    const blog = await Blog.findOne({ slug: req.params.slug });
+    res.render('blogs/edit', { blog });
+  },
+
   async editBlog(req, res, next) {
     try {
       const blog = await Blog.findOne({ slug: req.params.slug });
-      req.body.title = req.sanitize(req.body.title);
+      console.log(req.body)
       let tags = req.body.tags;
       req.body.tags = tags.split(',').map(tag => tag.trim());
       req.body.author = req.user._id;
+      blog.content = entities.encode(req.body.content);
+      if (req.body.featured) {
+        const featureCheck = await Blog.findOne({ featured: true });
+        if (featureCheck) {
+          featureCheck.featured = false
+          await featureCheck.save()
+        }
+        req.body.featured = true
+      }
+      blog.private = req.body.private;
+      blog.archived = req.body.archived;
       if (req.file) {
+        await cloudinary.v2.uploader.destroy(image.public_id);
         const { secure_url, public_id } = req.file;
         req.body.image = {
           secure_url,
@@ -44,15 +60,23 @@ module.exports = {
         };
       }
       if (req.body.title != blog.title) {
+        req.body.title = req.sanitize(req.body.title);
+        req.body.slug = await slug(moment(Date.now()).format("DD-MM-YYYY") + '-' + req.body.title);
         const slugCheck = await Blog.findOne({ slug: req.body.title });
         if (slugCheck) {
-          req.flash(
-            'error',
-            'This title cannot be used. Please use another one!'
-          );
-          return res.redirect('back');
+          req.body.slug = await slug(moment(Date.now()).format("DD-MM-YYYY") + '-' + req.body.title) + '-' + crypto.randomBytes(5).toString("hex");
+        } else {
+          req.body.slug = await slug(moment(Date.now()).format("DD-MM-YYYY") + '-' + req.body.title);
         }
       }
-    } catch (err) {}
+      await blog.save();
+      req.flash('success', 'Blog updated');
+      res.redirect(`/blogs/blog/${blog.slug}`)
+    } catch (err) {
+      console.log(err)
+      deleteProfileImage(req);
+      req.flash('error', err.message);
+      return res.redirect('/blogs');
+    }
   }
 };
