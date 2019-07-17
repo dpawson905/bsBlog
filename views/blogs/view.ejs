@@ -1,36 +1,34 @@
 <% include ../partials/header %>
   <main class="my-5">
-    <div class="container">
+    <div class="container-fluid">
       <div class="row my-3">
-        <div class="col-12">
+        <div class="col-10 offset-1">
             <p class="lead text-black-50 text-center mb-1 p-0"><i><%= moment(blog.publishDate).format('MMM Do, YYYY') %> / <%= blog.tags[0] %></i></p>
-          <h1 class="text-center capitolize"><%= blog.title %></h1>
-          <div class="d-flex d-inline-block justify-content-around px-2">
-            
-          </div>
-          <img class="img-fluid rounded shadow" src="<%= blog.image.secure_url %>" alt="<%= blog.title %> image">
+          <h1 class="text-center capitolize"><%= blog.title %>
+            <img class="med-img" src="<%= blog.author.image.secure_url %>" alt="<%= blog.author.username %>"> 
+              <i>
+                <span class="small"> by:
+                  <%= blog.author.firstName.charAt(0).toUpperCase() + blog.author.firstName.slice(1) %> 
+                  <%= blog.author.lastName.charAt(0).toUpperCase() + blog.author.lastName.slice(1) %>
+                </span>
+              </i>
+          </h1>
+          <img class="img-fluid-custom rounded shadow" src="<%= blog.image.secure_url %>" alt="<%= blog.title %> image">
         </div>
       </div>
       <div class="row mt-4">
-        <div class="col-10 offset-1 blog">
+        <div class="col-8 offset-2 blog">
           <div class="card p-3 shadow">
             <%- blog.content %>
-            <div class="">
-                <p class="small text-center lead"><img class="med-img" src="<%= blog.author.image.secure_url %>" alt="<%= blog.author.username %>"> <i><%= blog.author.firstName.charAt(0).toUpperCase() + blog.author.firstName.slice(1) %> 
-                  <%= blog.author.lastName.charAt(0).toUpperCase() + blog.author.lastName.slice(1) %></i></p>
-            </div>
-            <div class="">
-                <button type="button" class="btn btn-info">Setings</button>
+            <div class="row">
+              <div class="col-12">
+                <div class="d-flex d-inline-block justify-content-around my-auto">
+                  <p><a class="btn btn-warning" href="/blogs/blog/<%= blog.slug %>/edit">Edit Blog</a></p>
+                  <p><a class="btn btn-info" href="#">Archive Blog</a></p>
+                  <p><a class="btn btn-danger" href="#">Delete Blog</a></p>
+                </div>
               </div>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-12">
-          <div class="d-flex d-inline-block justify-content-around mt-4">
-            <p><a class="btn btn-warning" href="/blogs/blog/<%= blog.slug %>/edit">Edit Blog</a></p>
-            <p><a class="btn btn-info" href="#">Archive Blog</a></p>
-            <p><a class="btn btn-danger" href="#">Delete Blog</a></p>
+            </div>
           </div>
         </div>
       </div>

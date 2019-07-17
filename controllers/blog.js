@@ -36,7 +36,6 @@ module.exports = {
   async editBlog(req, res, next) {
     try {
       const blog = await Blog.findOne({ slug: req.params.slug });
-      console.log(req.body)
       let tags = req.body.tags;
       req.body.tags = tags.split(',').map(tag => tag.trim());
       req.body.author = req.user._id;
@@ -52,9 +51,9 @@ module.exports = {
       blog.private = req.body.private;
       blog.archived = req.body.archived;
       if (req.file) {
-        await cloudinary.v2.uploader.destroy(image.public_id);
+        await cloudinary.v2.uploader.destroy(blog.image.public_id);
         const { secure_url, public_id } = req.file;
-        req.body.image = {
+        blog.image = {
           secure_url,
           public_id
         };
@@ -73,7 +72,6 @@ module.exports = {
       req.flash('success', 'Blog updated');
       res.redirect(`/blogs/blog/${blog.slug}`)
     } catch (err) {
-      console.log(err)
       deleteProfileImage(req);
       req.flash('error', err.message);
       return res.redirect('/blogs');
