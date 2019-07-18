@@ -218,6 +218,42 @@ module.exports = {
     })
   },
 
+  async forgotPasswordEmail(req, res, next) {
+    const user = await User.findOne({ email: req.body.email });
+    if (user) {
+      const userToken = new Token({
+        _userId: user._id,
+        token: crypto.randomBytes(256).toString("hex")
+      });
+      await userToken.save();
+      const msg = {
+        from: "SimpleBlog <darrellpawson@protonmail.com>",
+        to: user.email,
+        subject: 'Forgot password request',
+        html: `
+              <h1>Hey There</h1>
+              <p>It looks like you have forgotten your password, please click the link below to validate your account.</p>
+              <p>If this was not you then please contact us so we can look into it.</p>
+              <p><a href="http://${
+                req.headers.host
+              }/users/validate-account?token=${
+          userToken.token
+        }&username=${user.username}">Reset your password</a></p>
+            `
+      };
+      await sgMail.send(msg);
+    }
+    req.flash(
+      "success",
+      "If the email address is in our system, we will send an email for your password reset request."
+    );
+    return res.redirect("/");
+  },
+
+  async getForgottenPassword(req, res, next) {
+    const user = await User.findOne({ username: req.query.username });
+  },
+
   logOut(req, res, next) {
     req.logout();
     return res.redirect("/");

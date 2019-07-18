@@ -13,7 +13,8 @@ const {
   changePassword,
   postNewToken,
   postLogin,
-  logOut
+  logOut,
+  forgotPasswordEmail
 } = require('../controllers/auth');
 
 const {
@@ -61,5 +62,8 @@ router.put('/user/:id', upload.single('image'), isNotAuthenticated, asyncErrorHa
 
 /* PUT Change PW */
 router.put('/user/:id/pw-change', isNotAuthenticated, asyncErrorHandler(changePassword));
+
+/* post forgot password email */
+router.post('/forgot', isAuthenticated, asyncErrorHandler(forgotPasswordEmail));
 
 module.exports = router;
