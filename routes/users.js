@@ -14,7 +14,9 @@ const {
   postNewToken,
   postLogin,
   logOut,
-  forgotPasswordEmail
+  forgotPasswordEmail,
+  getForgottenPassword,
+  postForgotPassword
 } = require('../controllers/auth');
 
 const {
@@ -65,5 +67,11 @@ router.put('/user/:id/pw-change', isNotAuthenticated, asyncErrorHandler(changePa
 
 /* post forgot password email */
 router.post('/forgot', isAuthenticated, asyncErrorHandler(forgotPasswordEmail));
+
+/* GET change pw email verify */
+router.get('/reset', isAuthenticated, asyncErrorHandler(getForgottenPassword));
+
+/* POST reset password */
+router.put('/reset', isAuthenticated, asyncErrorHandler(postForgotPassword));
 
 module.exports = router;

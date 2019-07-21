@@ -2,6 +2,7 @@ const debug = require("debug")("bootstrapblogapp:auth");
 const passport = require("passport");
 const sgMail = require("@sendgrid/mail");
 const crypto = require("crypto");
+const util = require('util');
 const { cloudinary } = require("../cloudinary");
 const { deleteProfileImage } = require("../middleware");
 
@@ -32,8 +33,7 @@ module.exports = {
         lastName: "",
         email: "",
         username: ""
-      },
-      kb_validate
+      }
     });
   },
 
@@ -96,8 +96,7 @@ module.exports = {
           error,
           userInfo,
           subTitle: "- Register",
-          url: "register",
-          kb_validate
+          url: "register"
         });
       }
     }
@@ -233,10 +232,10 @@ module.exports = {
         html: `
               <h1>Hey There</h1>
               <p>It looks like you have forgotten your password, please click the link below to validate your account.</p>
-              <p>If this was not you then please contact us so we can look into it.</p>
+              <p>If this was not you then please reply to this message so we can look into it.</p>
               <p><a href="http://${
                 req.headers.host
-              }/users/validate-account?token=${
+              }/users/reset?token=${
           userToken.token
         }&username=${user.username}">Reset your password</a></p>
             `
@@ -251,7 +250,39 @@ module.exports = {
   },
 
   async getForgottenPassword(req, res, next) {
-    const user = await User.findOne({ username: req.query.username });
+    const token = await Token.findOne({ token: req.query.token });
+    console.log(token)
+    if (token) {
+      const user = await User.findById(token._userId);
+      const username = user.username;
+      return res.render('auth/forgotPass', {
+        username,
+        title: 'Forgot Password',
+        subTitle: '',
+        url: ''
+      })
+    } else {
+      req.flash('error', 'That token has expired, please request a new link using the Forgot Password button.')
+      res.redirect('/');
+    }
+    
+  },
+
+  async postForgotPassword(req, res, next) {
+    const user = await User.findOne({ username: req.body.username});
+    
+    await user.setPassword(req.body.password, async(err) => {
+      if(err) {
+        req.flash('error', err.message);
+        return res.redirect('back');
+      }
+      user.attempts = 0;
+      user.expiresDateCheck = null;
+      await user.save();
+      await token.remove();
+      req.flash('success', 'Your password has been successfully updated. Please login using your new password');
+      res.redirect('/');
+    })
   },
 
   logOut(req, res, next) {
