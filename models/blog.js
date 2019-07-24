@@ -21,11 +21,21 @@ const BlogSchema = new Schema({
     trim: true
   },
   image:  {
-		secure_url: { type: String, default: '/images/blog.jpeg' },
+		secure_url: { 
+      type: String, 
+      default: '/images/blog.jpeg' 
+    },
 		public_id: String
   },
   likes: {
-    type: Array,
+    type: Number,
+    likedBy: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+      }
+    ],
+    default: 0
   },
   tags: {
     type: [String],

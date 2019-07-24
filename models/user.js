@@ -68,6 +68,10 @@ const UserSchema = new Schema({
     default: undefined,
     // if user is not verified then the account will be removed in 24 hours
     expires: 86400
+  },
+  private: {
+    type: Boolean,
+    default: false
   }
 }, { timestamps: true });
 

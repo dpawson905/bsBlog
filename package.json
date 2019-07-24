@@ -8,6 +8,8 @@
     "dev-win": "set DEBUG=bootstrapblogapp:* && nodemon"
   },
   "dependencies": {
+    "@pusher/chatkit-client": "^1.9.2",
+    "@pusher/chatkit-server": "^2.0.1",
     "@sendgrid/mail": "^6.4.0",
     "bootstrap": "^4.3.1",
     "cloudinary": "^1.14.0",

@@ -2,9 +2,15 @@ const debug = require("debug")("bootstrapblogapp:auth");
 const passport = require("passport");
 const sgMail = require("@sendgrid/mail");
 const crypto = require("crypto");
-const util = require('util');
+const util = require("util");
 const { cloudinary } = require("../cloudinary");
 const { deleteProfileImage } = require("../middleware");
+
+const Chatkit = require('@pusher/chatkit-server');
+const chatkit = new Chatkit.default({
+  instanceLocator: process.env.INSTANCE_LOCATOR,
+  key: process.env.CHAT_SECRET_KEY,
+});
 
 const User = require("../models/user");
 const Token = require("../models/token");
@@ -13,13 +19,13 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 module.exports = {
   async getStarted(req, res, next) {
-    const userCheck = 'noUser';
+    const userCheck = "noUser";
     if (req.user) {
       res.redirect("/blogs");
     } else {
-      res.render("index", { 
+      res.render("index", {
         userCheck,
-        url: 'home'
+        url: "home"
       });
     }
   },
@@ -39,6 +45,13 @@ module.exports = {
 
   async postRegisterUser(req, res, next) {
     const userInfo = req.body;
+    const chatUsername = userInfo.username;
+    const chatName =
+      userInfo.firstName.charAt(0).toUpperCase() +
+      userInfo.firstName.slice(1) +
+      " " +
+      userInfo.lastName.charAt(0).toUpperCase() +
+      userInfo.lastName.slice(1);
     try {
       const newUser = new User({
         firstName: userInfo.firstName,
@@ -55,6 +68,8 @@ module.exports = {
         token: crypto.randomBytes(256).toString("hex")
       });
       await userToken.save();
+      
+      debug(chatInfo);
       const msg = {
         from: "SimpleBLog <darrellpawson@protonmail.com>",
         to: user.email,
@@ -119,12 +134,32 @@ module.exports = {
       );
       return res.redirect("back");
     }
+    const chatUsername = user.username;
+    const chatName =
+      user.firstName.charAt(0).toUpperCase() +
+      user.firstName.slice(1) +
+      " " +
+      user.lastName.charAt(0).toUpperCase() +
+      user.lastName.slice(1);
     user.isVerified = true;
     user.expiresDateCheck = null;
+    chatkit.createUser({
+      id: chatUsername,
+      name: chatName,
+      avatarURL: user.image.secure_url
+    }).then((user) => {
+      debug(user);
+    }).catch((err) => {
+      debug(err)
+    });
     await user.save();
     await token.remove();
     await req.login(user, err => {
       if (err) return next(err);
+      const authData = chatkit.authenticate({
+        userId: req.query.user_id
+      });
+      console.log(authData);
       req.flash("success", `Welcome to SimpleBlog ${user.username}`);
       const redirectUrl = req.session.redirectTo || "/";
       delete req.session.redirectTo;
@@ -190,10 +225,16 @@ module.exports = {
     }
 
     if (!user.isVerified) {
-      req.flash('error', 'You have not validated your account. Please check your email to do so.');
-      return res.redirect('/');
+      req.flash(
+        "error",
+        "You have not validated your account. Please check your email to do so."
+      );
+      return res.redirect("/");
     }
-    
+    const authData = chatkit.authenticate({
+      userId: req.query.user_id
+    });
+    console.log(authData);
     await passport.authenticate("local", {
       successRedirect: "/",
       failureRedirect: "/",
@@ -204,17 +245,17 @@ module.exports = {
 
   async changePassword(req, res, next) {
     const user = await User.findById(req.user.id);
-    await user.setPassword(req.body.password, async(err) => {
-      if(err) {
-        req.flash('error', err.message);
-        return res.redirect('back');
+    await user.setPassword(req.body.password, async err => {
+      if (err) {
+        req.flash("error", err.message);
+        return res.redirect("back");
       }
       user.attempts = 0;
       user.expiresDateCheck = null;
       await user.save();
-      req.flash('success', 'Password has been changed.');
-      res.redirect('back');
-    })
+      req.flash("success", "Password has been changed.");
+      res.redirect("back");
+    });
   },
 
   async forgotPasswordEmail(req, res, next) {
@@ -228,14 +269,12 @@ module.exports = {
       const msg = {
         from: "SimpleBlog <darrellpawson@protonmail.com>",
         to: user.email,
-        subject: 'Forgot password request',
+        subject: "Forgot password request",
         html: `
               <h1>Hey There</h1>
               <p>It looks like you have forgotten your password, please click the link below to validate your account.</p>
               <p>If this was not you then please reply to this message so we can look into it.</p>
-              <p><a href="http://${
-                req.headers.host
-              }/users/reset?token=${
+              <p><a href="http://${req.headers.host}/users/reset?token=${
           userToken.token
         }&username=${user.username}">Reset your password</a></p>
             `
@@ -251,38 +290,43 @@ module.exports = {
 
   async getForgottenPassword(req, res, next) {
     const token = await Token.findOne({ token: req.query.token });
-    console.log(token)
+    console.log(token);
     if (token) {
       const user = await User.findById(token._userId);
       const username = user.username;
-      return res.render('auth/forgotPass', {
+      return res.render("auth/forgotPass", {
         username,
-        title: 'Forgot Password',
-        subTitle: '',
-        url: ''
-      })
+        title: "Forgot Password",
+        subTitle: "",
+        url: ""
+      });
     } else {
-      req.flash('error', 'That token has expired, please request a new link using the Forgot Password button.')
-      res.redirect('/');
+      req.flash(
+        "error",
+        "That token has expired, please request a new link using the Forgot Password button."
+      );
+      res.redirect("/");
     }
-    
   },
 
   async postForgotPassword(req, res, next) {
-    const user = await User.findOne({ username: req.body.username});
-    
-    await user.setPassword(req.body.password, async(err) => {
-      if(err) {
-        req.flash('error', err.message);
-        return res.redirect('back');
+    const user = await User.findOne({ username: req.body.username });
+
+    await user.setPassword(req.body.password, async err => {
+      if (err) {
+        req.flash("error", err.message);
+        return res.redirect("back");
       }
       user.attempts = 0;
       user.expiresDateCheck = null;
       await user.save();
       await token.remove();
-      req.flash('success', 'Your password has been successfully updated. Please login using your new password');
-      res.redirect('/');
-    })
+      req.flash(
+        "success",
+        "Your password has been successfully updated. Please login using your new password"
+      );
+      res.redirect("/");
+    });
   },
 
   logOut(req, res, next) {
