@@ -68,8 +68,6 @@ module.exports = {
         token: crypto.randomBytes(256).toString("hex")
       });
       await userToken.save();
-      
-      debug(chatInfo);
       const msg = {
         from: "SimpleBLog <darrellpawson@protonmail.com>",
         to: user.email,

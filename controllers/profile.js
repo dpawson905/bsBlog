@@ -18,7 +18,8 @@ module.exports = {
     if (email) currentUser.email = email;
     if (req.file) {
       if (currentUser.image.public_id)
-        await cloudinary.v2.uploader.destroy(user.image.public_id);
+        // Changed user to currentUser
+        await cloudinary.v2.uploader.destroy(currentUser.image.public_id);
       const { secure_url, public_id } = req.file;
       currentUser.image = {
         secure_url,
