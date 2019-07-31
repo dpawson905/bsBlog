@@ -69,7 +69,7 @@ module.exports = {
       });
       await userToken.save();
       const msg = {
-        from: "SimpleBLog <darrellpawson@protonmail.com>",
+        from: "Darrell Pawson <darrell@djpawson.me>",
         to: user.email,
         subject: `Welcome to SimpleBlog ${
           user.firstName
@@ -192,11 +192,9 @@ module.exports = {
     });
     await userToken.save();
     const msg = {
-      from: "SimpleBlog <darrellpawson@protonmail.com>",
+      from: "Darrell Pawson <darrell@djpawson.me>",
       to: user.email,
-      subject: `Welcome to SimpleBlog ${
-        user.firstName
-      } - Validate your account!`,
+      subject: `SimpleBlog - New Token`,
       html: `
             <h1>Hey There</h1>
             <p>It looks like you have registered for an account on our site, please click the link below to validate your account.</p>
@@ -265,7 +263,7 @@ module.exports = {
       });
       await userToken.save();
       const msg = {
-        from: "SimpleBlog <darrellpawson@protonmail.com>",
+        from: "Darrell Pawson <darrell@djpawson.me>",
         to: user.email,
         subject: "Forgot password request",
         html: `
