@@ -30,6 +30,7 @@ module.exports = {
 
   async getEditBlog(req, res, next) {
     const blog = await Blog.findOne({ slug: req.params.slug });
+    blog.content = entities.decode(blog.content);
     res.render('blogs/edit', { blog });
   },
 
@@ -92,5 +93,12 @@ module.exports = {
     await blog.save();
     req.flash('success', `Blog has been ${blog.archived ? 'archived' : 'removed from the archive.'}`);
     res.redirect('back');
+  },
+
+  async followers(req, res, next) {
+    const blog = await Blog.findOne({ slug: req.params.slug });
+    const blogOwner = await User.findById(blog.author.id);
+    const blogFollower = await User.findById(req.user.id);
+    blogOwner.push(blogFollower);
   }
 };
