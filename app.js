@@ -1,6 +1,3 @@
-if (app.get("env") == "development") {
-  require("dotenv").config();
-}
 const debug = require("debug")("bootstrapblogapp:app");
 const createError = require("http-errors");
 const express = require("express");
@@ -17,9 +14,6 @@ const methodOverride = require("method-override");
 const sassMiddleware = require("node-sass-middleware");
 const expressSanitizer = require("express-sanitizer");
 
-const { asyncErrorHandler } = require("./middleware");
-const { getNotifications } = require("./controllers/blogs");
-
 // DB MODEL FILES
 const User = require("./models/user.js");
 
@@ -27,6 +21,12 @@ const blogRouter = require("./routes/blog");
 const blogsRouter = require("./routes/blogs");
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
+
+const app = express();
+
+if (app.get("env") == "development") {
+  require("dotenv").config();
+}
 
 // Connect to db
 mongoose
@@ -52,7 +52,6 @@ store.on("error", function(error) {
   console.log("STORE ERROR!!!", error);
 });
 
-const app = express();
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
