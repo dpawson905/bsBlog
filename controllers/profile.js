@@ -6,13 +6,13 @@ const Blogs = require('../models/blog');
 
 module.exports = {
   async getProfile(req, res, next) {
-    let user = await User.findById(req.user.id);
-    let blogs = await Blogs.find({ 'author': req.user.id })
+    let user = await User.findById(req.user.id).limit(10);
+    let blogs = await Blogs.find({ author: req.user.id })
     res.render('profile/index', { blogs, user, url: 'profile', subTitle: '- Profile' });
   },
 
   async putEditProfile(req, res, next) {
-    const { username, email } = req.body;
+    const { username, email, private } = req.body;
     const { currentUser } = res.locals;
     if (username) currentUser.username = username;
     if (email) currentUser.email = email;
@@ -26,6 +26,8 @@ module.exports = {
         public_id
       };
     }
+    if (private) currentUser.private = true;
+    if (!private) currentUser.private = false;
     await currentUser.save();
     const login = util.promisify(req.login.bind(req));
     await login(currentUser);

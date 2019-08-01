@@ -9,7 +9,14 @@
             <img src="<%= user.image.secure_url %>" class="card-img-top" alt="<%= user.username %>'s profile image">
             <div class="card-body">
               <h5 class="card-title"><%= (user.firstName + ' ' + user.lastName).toUpperCase() %></h5>
-              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+              <% if (user.roles.admin) { %>
+                <p class="card-text"><i class="fas fa-users-cog text-info fa-lg"></i> Admin</p>
+              <% } else if (user.roles.manager) { %>
+                <p class="card-text"><i class="fas fa-user-shield text-info fa-lg"></i> Manager</p>
+              <% } else { %>
+                <p class="card-text"> <i class="fas fa-user text-info fa-lg"></i> Member</p>
+              <% } %>
+              <p class="card-text">Member Since: <%= moment(user.createdAt).format('MMMM DD, YYYY') %></p>
             </div>
             <ul class="list-group list-group-flush">
               <li class="list-group-item bg-info"><button class="btn btn-block card-link text-white" data-toggle="modal" data-target="#pwModal">Change PW</button></li>
@@ -84,7 +91,13 @@
                             <input type="file" class="form-control-file" id="image" name="image">
                           </div>
                         </div>
-                        <div class="col-md-6 text-center">
+                        <div class="col-md-6">
+                          <div class="form-group form-check mt-md-4">
+                            <input type="checkbox" class="form-check-input" id="private" name="private" <%- user.private ? 'checked' : '' %>>
+                            <label class="form-check-label" for="private">Make your account private</label>
+                          </div>
+                        </div>
+                        <div class="col-6 offset-3 text-center">
                           <button type="submit" class="btn btn-primary btn-block mt-3">Update Account</button>
                         </div>
                       </div>

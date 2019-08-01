@@ -6,12 +6,6 @@ const util = require("util");
 const { cloudinary } = require("../cloudinary");
 const { deleteProfileImage } = require("../middleware");
 
-const Chatkit = require('@pusher/chatkit-server');
-const chatkit = new Chatkit.default({
-  instanceLocator: process.env.INSTANCE_LOCATOR,
-  key: process.env.CHAT_SECRET_KEY,
-});
-
 const User = require("../models/user");
 const Token = require("../models/token");
 
@@ -45,13 +39,6 @@ module.exports = {
 
   async postRegisterUser(req, res, next) {
     const userInfo = req.body;
-    const chatUsername = userInfo.username;
-    const chatName =
-      userInfo.firstName.charAt(0).toUpperCase() +
-      userInfo.firstName.slice(1) +
-      " " +
-      userInfo.lastName.charAt(0).toUpperCase() +
-      userInfo.lastName.slice(1);
     try {
       const newUser = new User({
         firstName: userInfo.firstName,
@@ -132,24 +119,8 @@ module.exports = {
       );
       return res.redirect("back");
     }
-    const chatUsername = user.username;
-    const chatName =
-      user.firstName.charAt(0).toUpperCase() +
-      user.firstName.slice(1) +
-      " " +
-      user.lastName.charAt(0).toUpperCase() +
-      user.lastName.slice(1);
     user.isVerified = true;
     user.expiresDateCheck = null;
-    chatkit.createUser({
-      id: chatUsername,
-      name: chatName,
-      avatarURL: user.image.secure_url
-    }).then((user) => {
-      debug(user);
-    }).catch((err) => {
-      debug(err)
-    });
     await user.save();
     await token.remove();
     await req.login(user, err => {
@@ -227,10 +198,6 @@ module.exports = {
       );
       return res.redirect("/");
     }
-    const authData = chatkit.authenticate({
-      userId: req.query.user_id
-    });
-    console.log(authData);
     await passport.authenticate("local", {
       successRedirect: "/",
       failureRedirect: "/",
