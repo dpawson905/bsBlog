@@ -19,13 +19,28 @@
       <div class="row mt-4">
         <div class="col-8 offset-2 blog">
           <div class="card p-3 shadow">
-            <%- blog.content %>
+            <div class="h5">
+              <%- blog.content %>
+            </div>
+            <hr class="style-two">
             <div class="row">
               <div class="col-12">
                 <div class="d-flex d-inline-block justify-content-around my-auto">
-                  <p><a class="btn btn-warning" href="/blogs/blog/<%= blog.slug %>/edit">Edit Blog</a></p>
-                  <p><a class="btn btn-info" href="#">Archive Blog</a></p>
-                  <p><a class="btn btn-danger" href="#">Delete Blog</a></p>
+                  <% if(currentUser && currentUser.id === blog.author.id) { %>
+                    <a class="btn btn-primary" href="/blogs/blog/<%= blog.slug %>/edit">Edit Blog</a>
+                    <form action="/blogs/blog/<%= blog.slug %>/archive?_method=PUT" method="POST">
+                      <button class="btn btn-info"><%- blog.archived ? 'Unarchive Blog' : 'Archive Blog' %></button>
+                    </form>
+                    <a class="btn btn-danger" href="#">Delete Blog</a>
+                  <% } %>
+                  <% if(currentUser && currentUser.id == blog.author.id) { %>
+                    <form action="/blogs/blog/<%= blog.slug %>/like" method="post">
+                      <button class="btn btn-primary capitolize"><i class="far fa-thumbs-up"></i> Like <%= blog.title %></button>
+                    </form>
+                    <form action="/users/user/<%= blog.author.id %>/follow" method="post">
+                      <button class="btn btn-info capitolize"><i class="fab fa-optin-monster"></i> Follow <%= blog.author.firstName %>'s Blogs</button>
+                    </form>
+                  <% } %>
                 </div>
               </div>
             </div>

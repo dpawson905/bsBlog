@@ -14,7 +14,8 @@ const {
 const {
   getBlog,
   getEditBlog,
-  editBlog
+  editBlog,
+  archiveBlog
 } = require('../controllers/blog');
 
 /* GET home page. */
@@ -25,5 +26,8 @@ router.get('/:slug/edit', isNotAuthenticated, asyncErrorHandler(getEditBlog));
 
 /* PUT edit blog */
 router.put('/:slug', upload.single('image'), isNotAuthenticated, asyncErrorHandler(editBlog));
+
+/* PUT archive blog */
+router.put('/:slug/archive', isNotAuthenticated, asyncErrorHandler(archiveBlog));
 
 module.exports = router;

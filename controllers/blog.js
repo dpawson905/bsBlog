@@ -76,5 +76,17 @@ module.exports = {
       req.flash('error', err.message);
       return res.redirect('/blogs');
     }
+  },
+
+  async archiveBlog(req, res, next) {
+    const blog = await Blog.findOne({slug: req.params.slug});
+    if (blog.archived) {
+      blog.archived = false
+    } else {
+      blog.archived = true
+    }
+    await blog.save();
+    req.flash('success', `Blog has been ${blog.archived ? 'archived' : 'removed from the archive.'}`);
+    res.redirect('back');
   }
 };
