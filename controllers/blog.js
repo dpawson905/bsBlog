@@ -34,20 +34,23 @@ module.exports = {
   },
 
   async editBlog(req, res, next) {
+    const { featured } = req.body;
     try {
       const blog = await Blog.findOne({ slug: req.params.slug });
       let tags = req.body.tags;
       req.body.tags = tags.split(',').map(tag => tag.trim());
       req.body.author = req.user._id;
       blog.content = entities.encode(req.body.content);
-      if (req.body.featured) {
-        const featureCheck = await Blog.findOne({ featured: true });
-        if (featureCheck) {
-          featureCheck.featured = false
-          await featureCheck.save()
+      if (featured) {
+        const checkOtherFeatured = await Blog.findOne({ featured: true });
+        if (checkOtherFeatured && checkOtherFeatured.slug != req.params.slug) {
+          checkOtherFeatured.featured = false
+        } else {
+          blog.featured = true
         }
-        req.body.featured = true
       }
+      console.log(req.params)
+      if (!featured) blog.featured = false;
       blog.private = req.body.private;
       blog.archived = req.body.archived;
       if (req.file) {
@@ -74,6 +77,7 @@ module.exports = {
     } catch (err) {
       deleteProfileImage(req);
       req.flash('error', err.message);
+      console.log(err)
       return res.redirect('/blogs');
     }
   },
