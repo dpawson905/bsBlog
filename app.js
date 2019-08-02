@@ -118,7 +118,11 @@ app.use(async (req, res, next) => {
 });
 
 // app.all('*', asyncErrorHandler(getNotifications));
-app.use(vhost('*.localhost', userDomain));
+if (app.get("env") === "production") {
+  app.use(vhost('*.cportal.online', userDomain));
+} else {
+  app.use(vhost('*.localhost', userDomain));
+}
 app.use("/", indexRouter);
 app.use("/blogs", blogsRouter);
 app.use("/blogs/blog", blogRouter);
