@@ -4,9 +4,11 @@ module.exports = {
   async userIndex(req, res, next) {
     const user = await User.findOne({ username: req.vhost[0]});
     if (user) {
-      res.send('User found');
+      req.flash('success', 'User found');
+      return res.redirect('/');
     } else {
-      res.send('No User');
+      req.flash('error', 'User not found');
+      return res.redirect('/');
     }
     console.log(req.vhost[0])
   }
