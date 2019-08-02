@@ -53,14 +53,18 @@ const UserSchema = new Schema({
   },
   following: [
     {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User'
+      author: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+      }
     }
   ],
   followers: [
     {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User'
+      author: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+      }
     }
   ],
   expiresDateCheck: {
@@ -86,21 +90,14 @@ UserSchema.plugin(passportLocalMongoose, {
 
 // pre-hook middleware to populate author in question index routes
 UserSchema.pre('find', function(next) {
-  this.populate('followers');
+  //this.populate('followers');
+  this.populate('following.author');
   next();
 });
 
 UserSchema.pre('findOne', function(next) {
-  this.populate('followers');
-  next();
-});
-UserSchema.pre('find', function(next) {
-  this.populate('following');
-  next();
-});
-
-UserSchema.pre('findOne', function(next) {
-  this.populate('following');
+  //this.populate('followers');
+  this.populate('following.author');
   next();
 });
 

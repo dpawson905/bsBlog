@@ -25,6 +25,10 @@ const {
 } = require('../controllers/profile');
 
 const {
+  followers
+} = require('../controllers/blog');
+
+const {
   asyncErrorHandler,
   isLoggedIn,
   isVerified,
@@ -73,5 +77,8 @@ router.get('/reset', isAuthenticated, asyncErrorHandler(getForgottenPassword));
 
 /* POST reset password */
 router.put('/reset', isAuthenticated, asyncErrorHandler(postForgotPassword));
+
+/* PUT follower */
+router.put('/user/:id/follow', isNotAuthenticated, asyncErrorHandler(followers))
 
 module.exports = router;

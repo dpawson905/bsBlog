@@ -50,7 +50,6 @@ module.exports = {
           blog.featured = true
         }
       }
-      console.log(req.params)
       if (!featured) blog.featured = false;
       blog.private = req.body.private;
       blog.archived = req.body.archived;
@@ -96,9 +95,14 @@ module.exports = {
   },
 
   async followers(req, res, next) {
-    const blog = await Blog.findOne({ slug: req.params.slug });
-    const blogOwner = await User.findById(blog.author.id);
+    /* const blog = await Blog.findOne({ slug: req.body.slug });
     const blogFollower = await User.findById(req.user.id);
-    blogOwner.push(blogFollower);
+    blogFollower.following.push(blog.author);
+    await blogFollower.save() */
+    /* const blogOwner = await User.findById(blog.author.id);
+    blogOwner.followers.push(blogFollower);
+    await blogOwner.save(); */
+    req.flash('success', `You are now following ${blog.author.firstName}`);
+    return res.redirect('back');
   }
 };

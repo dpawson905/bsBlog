@@ -37,7 +37,8 @@
                     <form action="/blogs/blog/<%= blog.slug %>/like" method="post">
                       <button class="btn btn-primary capitolize"><i class="far fa-thumbs-up"></i> Like <%= blog.title %></button>
                     </form>
-                    <form action="/users/user/<%= blog.author.id %>/follow" method="post">
+                    <form action="/users/user/<%= blog.author.id %>/follow?_method=PUT" method="post">
+                      <input type="hidden" name="slug" value="<%= blog.slug %>">
                       <button class="btn btn-info capitolize"><i class="fab fa-optin-monster"></i> Follow <%= blog.author.firstName %>'s Blogs</button>
                     </form>
                   <% } %>

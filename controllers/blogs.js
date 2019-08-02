@@ -26,9 +26,7 @@ const converter = new showdown.Converter({
 
 module.exports = {
 
-  async getBlogs(req, res, next) {
-    const blog = await Blog.find({});
-    
+  async getBlogs(req, res, next) {    
     const blogs = await Blog.find({ 
       author: {
         $eq: req.user._id
