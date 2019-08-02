@@ -13,6 +13,7 @@ const passport = require("passport");
 const methodOverride = require("method-override");
 const sassMiddleware = require("node-sass-middleware");
 const expressSanitizer = require("express-sanitizer");
+const vhost = require('vhost');
 
 // DB MODEL FILES
 const User = require("./models/user.js");
@@ -21,6 +22,7 @@ const blogRouter = require("./routes/blog");
 const blogsRouter = require("./routes/blogs");
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
+const userDomain = require('./routes/userDomain');
 
 const app = express();
 
@@ -116,6 +118,7 @@ app.use(async (req, res, next) => {
 });
 
 // app.all('*', asyncErrorHandler(getNotifications));
+app.use(vhost('*.localhost', userDomain));
 app.use("/", indexRouter);
 app.use("/blogs", blogsRouter);
 app.use("/blogs/blog", blogRouter);
