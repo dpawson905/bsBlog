@@ -125,10 +125,6 @@ module.exports = {
     await token.remove();
     await req.login(user, err => {
       if (err) return next(err);
-      const authData = chatkit.authenticate({
-        userId: req.query.user_id
-      });
-      console.log(authData);
       req.flash("success", `Welcome to SimpleBlog ${user.username}`);
       const redirectUrl = req.session.redirectTo || "/";
       delete req.session.redirectTo;
