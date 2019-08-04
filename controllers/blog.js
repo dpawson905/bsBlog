@@ -18,6 +18,8 @@ const converter = new showdown.Converter({
 
 module.exports = {
   async getBlog(req, res, next) {
+    const user = await User.find().populate('followers').exec();
+    console.log(user[0].followers[0].username)
     const blog = await Blog.findOne({ slug: req.params.slug });
     let decodeBlog = entities.decode(blog.content);
     blog.content = await converter.makeHtml(decodeBlog);
@@ -95,13 +97,13 @@ module.exports = {
   },
 
   async followers(req, res, next) {
-    /* const blog = await Blog.findOne({ slug: req.body.slug });
+    const blog = await Blog.findOne({ slug: req.body.slug });
     const blogFollower = await User.findById(req.user.id);
     blogFollower.following.push(blog.author);
-    await blogFollower.save() */
-    /* const blogOwner = await User.findById(blog.author.id);
+    await blogFollower.save()
+    const blogOwner = await User.findById(blog.author.id);
     blogOwner.followers.push(blogFollower);
-    await blogOwner.save(); */
+    await blogOwner.save();
     req.flash('success', `You are now following ${blog.author.firstName}`);
     return res.redirect('back');
   }

@@ -85,12 +85,11 @@ module.exports = {
           error,
           userInfo,
           subTitle: "- Register",
-          url: "register",
-          kb_validate
+          url: "register"
         });
       } else {
         deleteProfileImage(req);
-        console.log(err);
+        console.log(err.response.body);
         const error = err.message;
         return res.render("auth/register", {
           error,

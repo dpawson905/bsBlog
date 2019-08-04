@@ -19,6 +19,7 @@ const User = require("./models/user.js");
 
 const blogRouter = require("./routes/blog");
 const blogsRouter = require("./routes/blogs");
+const userBlog = require('./routes/userBlog');
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
 
@@ -82,8 +83,7 @@ const sess = {
   cookie: {
     httpOnly: false,
     expires: Date.now() + 1000 * 60 * 60,
-    maxAge: 1000 * 60 * 60,
-    domain: 'localhost'
+    maxAge: 1000 * 60 * 60
   },
   store,
   resave: true,
@@ -94,14 +94,6 @@ if (app.get("env") === "production") {
   app.set("trust proxy", true); // trust first proxy
   sess.cookie.secure = true; // serve secure cookies
 }
-
-/* app.use(function(req, res, next) {
-  res.header('Access-Control-Allow-Credentials', true);
-  res.header('Access-Control-Allow-Origin', req.headers.origin);
-  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-  res.header('Access-Control-Allow-Headers', 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept');
-  next();
-}); */
 
 app.use(flash());
 app.use(session(sess));
@@ -129,6 +121,7 @@ app.use("/", indexRouter);
 app.use("/blogs", blogsRouter);
 app.use("/blogs/blog", blogRouter);
 app.use("/users", usersRouter);
+app.use("/users/:username", userBlog);
 
 // catch 404 and display message to user
 app.use(function(req, res, next) {
