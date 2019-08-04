@@ -13,7 +13,6 @@ const passport = require("passport");
 const methodOverride = require("method-override");
 const sassMiddleware = require("node-sass-middleware");
 const expressSanitizer = require("express-sanitizer");
-const vhost = require('vhost');
 
 // DB MODEL FILES
 const User = require("./models/user.js");
@@ -22,7 +21,6 @@ const blogRouter = require("./routes/blog");
 const blogsRouter = require("./routes/blogs");
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
-const userDomain = require('./routes/userDomain');
 
 const app = express();
 
@@ -82,9 +80,10 @@ app.use(methodOverride("_method"));
 const sess = {
   secret: process.env.COOKIE_SECRET,
   cookie: {
-    httpOnly: true,
+    httpOnly: false,
     expires: Date.now() + 1000 * 60 * 60,
-    maxAge: 1000 * 60 * 60
+    maxAge: 1000 * 60 * 60,
+    domain: 'localhost'
   },
   store,
   resave: true,
@@ -95,6 +94,14 @@ if (app.get("env") === "production") {
   app.set("trust proxy", true); // trust first proxy
   sess.cookie.secure = true; // serve secure cookies
 }
+
+/* app.use(function(req, res, next) {
+  res.header('Access-Control-Allow-Credentials', true);
+  res.header('Access-Control-Allow-Origin', req.headers.origin);
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+  res.header('Access-Control-Allow-Headers', 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept');
+  next();
+}); */
 
 app.use(flash());
 app.use(session(sess));
@@ -118,11 +125,6 @@ app.use(async (req, res, next) => {
 });
 
 // app.all('*', asyncErrorHandler(getNotifications));
-if (app.get("env") === "production") {
-  app.use(vhost('*.cportal.online', userDomain));
-} else {
-  app.use(vhost('*.localhost', userDomain));
-}
 app.use("/", indexRouter);
 app.use("/blogs", blogsRouter);
 app.use("/blogs/blog", blogRouter);
