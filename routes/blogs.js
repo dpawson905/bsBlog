@@ -8,7 +8,8 @@ const {
   asyncErrorHandler,
   isLoggedIn,
   isAuthenticated,
-  isNotAuthenticated
+  isNotAuthenticated,
+  isBlogOwner
 } = require('../middleware');
 
 const {

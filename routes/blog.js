@@ -8,7 +8,8 @@ const {
   asyncErrorHandler,
   isLoggedIn,
   isAuthenticated,
-  isNotAuthenticated
+  isNotAuthenticated,
+  isBlogOwner
 } = require('../middleware');
 
 const {
@@ -19,7 +20,7 @@ const {
 } = require('../controllers/blog');
 
 /* GET home page. */
-router.get('/:slug', isNotAuthenticated, asyncErrorHandler(getBlog));
+router.get('/:slug', isNotAuthenticated, asyncErrorHandler(isBlogOwner), asyncErrorHandler(getBlog));
 
 /* GET blog edit */
 router.get('/:slug/edit', isNotAuthenticated, asyncErrorHandler(getEditBlog));

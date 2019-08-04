@@ -27,11 +27,11 @@ const converter = new showdown.Converter({
 module.exports = {
 
   async getBlogs(req, res, next) {
-    const user = await User.find().populate('followers').exec();    
+    // const user = await User.find().populate('followers').exec();    
     const blogs = await Blog.find({ 
       author: {
         $eq: req.user._id,
-        $in: user[0].followers,
+        // $in: user[0].followers,
       },
       publishDate: {
         $lte: Date.now()

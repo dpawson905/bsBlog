@@ -1,5 +1,6 @@
 const { cloudinary } = require('../cloudinary');
 const User = require('../models/user');
+const Blog = require('../models/blog');
 
 const middleware = {
   asyncErrorHandler: fn => (req, res, next) => {
@@ -55,6 +56,18 @@ const middleware = {
     }
     req.flash('error', 'Your account is already active.');
     res.redirect('/');
+  },
+
+  isBlogOwner: async(req, res, next) => {
+    let blog = await Blog.findOne({
+      slug: req.params.slug,
+      author: req.user._id
+    });
+    if (!blog) {
+      req.flash('error', 'You are not permitted to view this');
+      return res.redirect('/');
+    }
+    next();
   }
 };
 

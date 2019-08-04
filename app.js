@@ -1,3 +1,4 @@
+require("dotenv").config();
 const debug = require("debug")("bootstrapblogapp:app");
 const createError = require("http-errors");
 const express = require("express");
@@ -25,9 +26,9 @@ const usersRouter = require("./routes/users");
 
 const app = express();
 
-if (app.get("env") == "development") {
-  require("dotenv").config();
-}
+// if (app.get("env") == "development") {
+//   require("dotenv").config();
+// }
 
 // Connect to db
 mongoose
@@ -81,7 +82,7 @@ app.use(methodOverride("_method"));
 const sess = {
   secret: process.env.COOKIE_SECRET,
   cookie: {
-    httpOnly: false,
+    httpOnly: true,
     expires: Date.now() + 1000 * 60 * 60,
     maxAge: 1000 * 60 * 60
   },

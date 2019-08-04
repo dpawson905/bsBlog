@@ -89,7 +89,7 @@ module.exports = {
         });
       } else {
         deleteProfileImage(req);
-        console.log(err.response.body);
+        console.log(err);
         const error = err.message;
         return res.render("auth/register", {
           error,
@@ -102,7 +102,7 @@ module.exports = {
   },
 
   async validateNewAccount(req, res, next) {
-    const token = Token.findOne({ token: req.query.token });
+    const token = await Token.findOne({ token: req.query.token });
     if (!token) {
       req.flash(
         "error",
@@ -110,7 +110,7 @@ module.exports = {
       );
       return res.redirect("/");
     }
-    let user = await User.findOne({ id: token._userId });
+    let user = await User.findOne({ _id: token._userId });
     if (!user) {
       req.flash(
         "error",
@@ -122,6 +122,8 @@ module.exports = {
     user.expiresDateCheck = null;
     await user.save();
     await token.remove();
+    /* req.flash('success', 'Your account is now valid.');
+    res.redirect('/'); */
     await req.login(user, err => {
       if (err) return next(err);
       req.flash("success", `Welcome to SimpleBlog ${user.username}`);
@@ -287,7 +289,7 @@ module.exports = {
     });
   },
 
-  logOut(req, res, next) {
+  async logOut(req, res, next) {
     req.logout();
     return res.redirect("/");
   }

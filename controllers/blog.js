@@ -18,8 +18,8 @@ const converter = new showdown.Converter({
 
 module.exports = {
   async getBlog(req, res, next) {
-    const user = await User.find().populate('followers').exec();
-    console.log(user[0].followers[0].username)
+    /* const user = await User.find().populate('followers').exec();
+    console.log(user[0].followers[0].username) */
     const blog = await Blog.findOne({ slug: req.params.slug });
     let decodeBlog = entities.decode(blog.content);
     blog.content = await converter.makeHtml(decodeBlog);
