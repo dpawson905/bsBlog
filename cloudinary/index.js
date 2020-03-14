@@ -9,7 +9,11 @@ const cloudinaryStorage = require('multer-storage-cloudinary');
 const storage = cloudinaryStorage({
   cloudinary: cloudinary,
   folder: 'Simple-Blog',
-  allowedFormats: ['jpeg', 'jpg', 'png'],
+	allowedFormats: ['jpeg', 'jpg', 'png'],
+	// transformation: {
+	// 	width: 800,
+	// 	height: 600
+	// },
   filename: function (req, file, cb) {
   	let buf = crypto.randomBytes(16);
   	buf = buf.toString('hex');
