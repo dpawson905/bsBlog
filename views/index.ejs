@@ -1,5 +1,5 @@
-<% include ./partials/header %>
-  <% include ./partials/hero %>
+<%- include ('./partials/header') %>
+  <%- include ('./partials/hero') %>
   <main>
     <div class="container-fluid custom-container">
       <div class="row">
@@ -60,10 +60,10 @@
     </div>
   </main>
   <% if (!currentUser&& !isAuthenticated) { %>
-    <% include ./partials/modals/forgotPwModal %>
-    <% include ./partials/modals/loginModal %>
+    <%- include ('./partials/modals/forgotPwModal') %>
+    <%- include ('./partials/modals/loginModal') %>
   <% } %>
-<% include ./partials/footer %> 
+<%- include ('./partials/footer') %> 
 
 <script>
   if ('<%= userCheck %>' == 'noUser') {
