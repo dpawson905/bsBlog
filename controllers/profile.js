@@ -7,8 +7,45 @@ const Blogs = require('../models/blog');
 module.exports = {
   async getProfile(req, res, next) {
     let user = await User.findById(req.user.id).limit(10);
-    let blogs = await Blogs.find({ author: req.user.id })
-    res.render('profile/index', { blogs, user, url: 'profile', subTitle: '- Profile' });
+    let blogs = await Blogs.paginate(
+      { author: req.user.id },
+      {
+        page: req.query.page || 1,
+        limit: 10,
+        sort: '-_id'
+      }
+    );
+    blogs.page = Number(blogs.page);
+    let totalPages = blogs.pages;
+    let currentPage = blogs.page;
+    let startPage;
+    let endPage;
+
+    if (totalPages <= 10) {
+      startPage = 1;
+      endPage = totalPages;
+    } else {
+      if (currentPage <= 6) {
+        startPage = 1;
+        endPage = 10;
+      } else if (currentPage + 4 >= totalPages) {
+        startPage = totalPages - 9;
+        endPage = totalPages;
+      } else {
+        startPage = currentPage - 5;
+        endPage = currentPage + 4;
+      }
+    }
+    res.render('profile/index', { 
+      blogs, 
+      user, 
+      url: 'profile', 
+      subTitle: '- Profile',
+      startPage,
+      endPage,
+      currentPage,
+      totalPages
+    });
   },
 
   async putEditProfile(req, res, next) {

@@ -38,16 +38,17 @@
             <!-- Tab panes -->
             <div class="tab-content mt-2 my-auto mx-auto">
               <div class="tab-pane active p3" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                <% if (!blogs.length) { %>
+                <% if (!blogs.docs.length) { %>
                   <h1 class="text-center">You do not have any blogs just yet!</h1>
                   <p class="text-center p-3"><a href="/blogs/new-blog" class="btn btn-primary">Create a Blog</a></p>
                 <% } else { %>
                   <h1 class="text-center">Your most recent Blogs</h1>
                   <ul class="list-group list-group-flush">
-                    <% blogs.forEach((blog) => { %>
+                    <% blogs.docs.forEach((blog) => { %>
                       <li class="list-group-item"><%= blog.title %> <span class="float-right"><a href="/blogs/blog/<%= blog.slug %>">View</a></span></li>
                     <% }) %>
                   </ul>
+                  <%- include ('../partials/paginate.ejs') %>
                 <% } %>
               </div>
               <div class="tab-pane p3" id="edit" role="tabpanel" aria-labelledby="edit-tab">

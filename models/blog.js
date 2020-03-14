@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const User = require('./user');
+const mongoosePaginate = require('mongoose-paginate');
 
 const date = Date.now();
 
@@ -66,6 +67,8 @@ BlogSchema.index({
   title: 'text',
   tags: 'text'
 });
+
+BlogSchema.plugin(mongoosePaginate);
 
 // pre-hook middleware to populate author in question index routes
 BlogSchema.pre('find', function(next) {
