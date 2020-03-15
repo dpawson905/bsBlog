@@ -281,6 +281,18 @@ module.exports = {
       user.expiresDateCheck = null;
       await user.save();
       await token.remove();
+      const msg = {
+        from: "Darrell Pawson <darrell@djpawson.me>",
+        to: user.email,
+        subject: "Password Changed",
+        html: `
+              <h1>Hey There</h1>
+              <p>It looks like your password was changed.</p>
+              <p>If this was not you then please reply to this message so we can look into it.</p>
+              <p>Thanks... Admin</p>
+            `
+      };
+      await sgMail.send(msg);
       req.flash(
         "success",
         "Your password has been successfully updated. Please login using your new password"
